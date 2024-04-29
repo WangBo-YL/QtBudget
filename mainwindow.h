@@ -33,10 +33,12 @@ public:
 private:
     void navigateToPage(int pageIndex);
     void returnToHomepage();
-    void updateItemList();
+    void updateItemList(int currentBudgetID);
     void updateBudgetList();
 
+
 private slots:
+    void on_itemSelected();
 
     void on_BudgetButton_clicked();
 
@@ -56,14 +58,28 @@ private slots:
 
     void on_returnButton_2_clicked();
 
-
-    void on_budgetListWidget_itemClicked(QListWidgetItem *item);
+    void on_budgetListWidget_itemClicked();
 
     void on_exitButton_clicked();
+
+    void on_editItemButton_clicked();
+
+    void on_editItemSaveButton_clicked();
+
+    void on_cancelEditItemButton_clicked();
+
+    void on_budgetSelected();
+
+    void on_editBudgetButton_clicked();
+
+    void on_deleteItemButton_clicked();
 
 private:
     Ui::MainWindow *ui;
     databaseManager db;
+    int currentBudgetID;
+    QString currentBudgetName;
     Budget* currentBudget;
+
 };
 #endif // MAINWINDOW_H

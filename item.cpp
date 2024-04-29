@@ -3,7 +3,7 @@
 Item::Item(int itemID,int budgetID, const QString& name, double amount, int categoryID)
     : itemID(itemID), budgetID(budgetID),  categoryID(categoryID), name(name),amount(amount) {}
 
-Item::Item(const QString& name, double amount, int categoryID):categoryID(categoryID),name(name),amount(amount)
+Item::Item(int budgetID,const QString& name, double amount, int categoryID):budgetID(budgetID),categoryID(categoryID),name(name),amount(amount)
 {
 }
 

@@ -22,11 +22,12 @@ public:
     Budget getBudget(int budgetID);
     QList<Budget> getAllBudgets();
     QList<Item> getItemsByBudget(int budgetID);
-    bool updateBudget(const Budget& budget, const QList<Item>& items);
-    bool updateItem(const Item& item, bool updateBudgetTotal);
-    bool updateBudgetTotalAmount(int budgetID);
+    Item getItem(int itemID);
+    bool updateBudget(const Budget& budget);
+    bool updateItem(const Item& item, int currentBudgetID);
     bool deleteBudget(int budgetID);
     bool deleteItem(int itemID);
+    int getBudgetIDByName(const QString& name);
 };
 
 #endif // DATABASEMANAGEMENT_H

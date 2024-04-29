@@ -1,6 +1,6 @@
 #include"budget.h"
 
-Budget::Budget(const QString& name, double total):name(name),totalAmount(total)
+Budget::Budget(const QString& name, double total = 0):name(name),totalAmount(total)
 {
 }
 

@@ -27,7 +27,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="page0">
      <widget class="QPushButton" name="BudgetButton">
@@ -175,7 +175,7 @@
      <widget class="QPushButton" name="exitButton">
       <property name="geometry">
        <rect>
-        <x>640</x>
+        <x>590</x>
         <y>410</y>
         <width>111</width>
         <height>41</height>
@@ -193,6 +193,32 @@
         <width>311</width>
         <height>331</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="editItemButton">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>330</y>
+        <width>111</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="deleteItemButton">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>390</y>
+        <width>111</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Delete</string>
       </property>
      </widget>
     </widget>
@@ -309,7 +335,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>OK</string>
+       <string>save</string>
       </property>
      </widget>
      <widget class="QComboBox" name="categoryBox">
@@ -372,8 +398,8 @@
      <widget class="QPushButton" name="returnButton_2">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>10</y>
+        <x>210</x>
+        <y>430</y>
         <width>91</width>
         <height>41</height>
        </rect>
@@ -386,10 +412,180 @@
       <property name="geometry">
        <rect>
         <x>80</x>
-        <y>110</y>
+        <y>30</y>
         <width>631</width>
-        <height>341</height>
+        <height>361</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="editBudgetButton">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>430</y>
+        <width>101</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page6">
+     <widget class="QLabel" name="itemNameEditLabel">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>110</y>
+        <width>101</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Name:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="AmountEditLabel">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>200</y>
+        <width>101</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Amount:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="CategoryEditLable">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>290</y>
+        <width>101</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Category:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="itemNameEdit2">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>120</y>
+        <width>291</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="amountEdit2">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>210</y>
+        <width>291</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="categoryBox2">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>300</y>
+        <width>291</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <item>
+       <property name="text">
+        <string>Grocery</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Transportation</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Housing</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Utilities</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Food</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Clothing</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Vehicle</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Entertainment</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QPushButton" name="editItemSaveButton">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>410</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>save</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="cancelEditItemButton">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>410</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>cancel</string>
       </property>
      </widget>
     </widget>

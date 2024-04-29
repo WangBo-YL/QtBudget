@@ -17,7 +17,7 @@ class Budget
     private:
     int budgetID;
     QString name;
-    double totalAmount;
+    double totalAmount = 0;
 };
 
 #endif

@@ -1,6 +1,6 @@
 #include "category.h"
 
-Category::Category(int id,std::string name)
+Category::Category(int id, const QString& name)
     :categoryID(id), name(name)
 {}
 
@@ -9,12 +9,12 @@ int Category::getCategoryID() const
     return categoryID;
 }
 
-std::string Category::getName() const
+QString Category::getName() const
 {
     return name;
 }
 
-void Category::setName(std::string name)
+void Category::setName(const QString& name)
 {
     this->name = name;
 }
