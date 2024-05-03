@@ -13,6 +13,8 @@ class Category
     private:
         int categoryID;
         QString name;
+        int budgetID;
+        double totalSpent;
 };
 
 #endif

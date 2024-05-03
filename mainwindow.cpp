@@ -6,11 +6,13 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , db("budget.db")
-    ,currentBudget(nullptr)
 {
     ui->setupUi(this);
-    ui->itemListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+
     ui->budgetListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    listWidget = new QListWidget(this);
+    connect(listWidget, &QListWidget::itemClicked, this, &MainWindow::on_itemSelected);
 
     // connect(ui->saveItemButton, &QPushButton::clicked, this, &MainWindow::on_saveItemButton_clicked);
     connect(ui->cancelButton, &QPushButton::clicked,this, &MainWindow::on_cancelButton_clicked);
@@ -18,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->cancelButton_3, &QPushButton::clicked,this, &MainWindow::on_cancelButton_clicked);
     connect(ui->returnButton, &QPushButton::clicked,this, &MainWindow::on_returnButton_clicked);
     connect(ui->budgetListWidget, &QListWidget::itemClicked, this, &MainWindow::on_budgetListWidget_itemClicked);
-    connect(ui->itemListWidget, &QListWidget::itemSelectionChanged, this, &MainWindow::on_itemSelected);
     connect(ui->editItemButton, &QPushButton::clicked, this, &MainWindow::on_editItemButton_clicked);
     connect(ui->budgetListWidget, &QListWidget::itemClicked, this, &MainWindow::on_budgetSelected);
     connect(ui->editBudgetButton, &QPushButton::clicked, this, &MainWindow::on_editBudgetButton_clicked);
@@ -29,12 +30,25 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete currentBudget;
 }
 
-
-void MainWindow::on_itemSelected()
+int MainWindow::getBudgetID(const Item& item)
 {
+
+}
+
+int MainWindow::findItemIndex(QListWidgetItem* clickedItem)
+{
+    for(int i = 0; i < items.size(); ++i)
+    {
+        if(items[i].getItemID() == clickedItem.
+    }
+}
+
+void MainWindow::on_itemSelected(QListWidgetItem* item)
+{
+    int itemID = item->data(Qt::UserRole).toInt();
+    qDebug() << "Clicked Item ID: " <<itemID << " from Budget ID: " << currentBudgetID;
     if(!ui->itemListWidget->selectedItems().isEmpty())
     {
         ui->editItemButton->show();
@@ -42,30 +56,34 @@ void MainWindow::on_itemSelected()
         ui->editItemButton->hide();
     }
 }
-void MainWindow::updateItemList(int currentBudgetID)
+void MainWindow::updateItemList(int budgetID)
 {
-    QList<Item> items = db.getItemsByBudget(currentBudgetID);
+    listWidget->clear();
+    QList<Item> items = db.getItemsByBudget(budgetID);
     ui->itemListWidget->clear();
-    for(const Item& item:items)
-    {
-        QListWidgetItem *itemWidget = new QListWidgetItem(item.getName()+ " - $" + QString::number(item.getAmount()));
-        itemWidget->setData(Qt::UserRole, QVariant(item.getItemID()));
-        ui->itemListWidget->addItem(itemWidget);
+    for (const Item& item : items) {
+        ui->itemListWidget->addItem(item.getName() + " - " + QString::number(item.getAmount()));
     }
-    ui -> editItemButton->hide();
 }
 
 
 void MainWindow::updateBudgetList()
 {
-    QList<Budget> budgets = db.getAllBudgets();
-    ui->budgetListWidget->clear();
-    for (const Budget& budget : budgets) {
-        QListWidgetItem* item = new QListWidgetItem(budget.getName());
-        item->setData(Qt::UserRole, QVariant(budget.getBudgetID()));
-        ui->budgetListWidget->addItem(item);
+    QSqlQuery query(db.getDatabase());
+    query.prepare("SELECT * FROM item WHERE budgetID = ?");
+    query.addBindValue(currentBudgetID);
+    if (!query.exec()) {
+        qDebug() << "Error retrieving items: " << query.lastError().text();
+        return;
     }
-    ui->editBudgetButton->hide();
+
+    ui->itemListWidget->clear();
+    while (query.next()) {
+        QString itemDesc = QString("%1 - $%2").arg(query.value("itemName").toString()).arg(query.value("amount").toDouble());
+        QListWidgetItem *itemWidget = new QListWidgetItem(itemDesc);
+        itemWidget->setData(Qt::UserRole, query.value("itemID"));
+        ui->itemListWidget->addItem(itemWidget);
+    }
 }
 
 void MainWindow::returnToHomepage()
@@ -114,19 +132,17 @@ void MainWindow::on_createButton_clicked()
         return;
     }
 
-    int existingBudgetID = db.getBudgetIDByName(budgetName);
-    if (existingBudgetID != -1) {
+    QString existBudget = db.getBudget(budgetName).getName();
+    if (existBudget == budgetName) {
         QMessageBox::warning(this, "Warning", "A budget with this name already exists.");
         return;
     }
 
     Budget newBudget(budgetName, 0);
-    if (db.addBudget(newBudget)) {
-        currentBudgetID = db.getBudgetIDByName(budgetName);
-        currentBudgetName = budgetName;
+    int newBudgetID = db.addBudget(newBudget);
+    if (newBudgetID!=1) {
+        QMessageBox::information(this,"Success","Budget Created Successful!");
         navigateToPage(3);
-        updateBudgetList();
-        updateItemList(currentBudgetID);
     } else {
         QMessageBox::warning(this, "Database Error", "Failed to add budget.");
     }
@@ -157,16 +173,13 @@ void MainWindow::on_saveItemButton_clicked() {
         return;
     }
 
-    Item newItem(currentBudgetID,itemName,itemAmount,categoryID);
-    if(db.addItem(newItem))
+    Item newItem(itemName,itemAmount, categoryID);
+    int newItemID = db.addItem(newItem);
+    if(newItemID !=1)
     {
-        QMessageBox::information(this, "Success", "Item added successfully.");
-        navigateToPage(3);  // Assuming this is the confirmation or next logical page
-        updateItemList(currentBudgetID);
-    }else{
-         QMessageBox::warning(this, "Database Error", "Failed to add item.");
+        qDebug() << "Item has been added to budget with ID" << newItemID << " in budget " << currentBudgetID;
+        QMessageBox::information(this,"Success", "Item added successfully!");
     }
-
     ui->itemNameEdit->clear();
     ui->amountEdit->clear();
     ui->categoryBox->setCurrentIndex(0);
@@ -174,7 +187,7 @@ void MainWindow::on_saveItemButton_clicked() {
 }
 
 
-void MainWindow::on_budgetSelected()
+void MainWindow::on_budgetSelected(int budgetID)
 {
     if(ui->budgetListWidget->currentItem())
     {
@@ -216,18 +229,13 @@ void MainWindow::on_editItemButton_clicked()
 {
 
     QListWidgetItem *selectedItem = ui->itemListWidget->currentItem();
-
     if (selectedItem) {
         int itemID = selectedItem->data(Qt::UserRole).toInt();
-        try {
-            Item item = db.getItem(itemID);
-            if (item.getBudgetID() == currentBudgetID) {
-                navigateToPage(6);
-            } else {
-                QMessageBox::warning(this, "Error", "Selected item does not belong to the current budget.");
-            }
-        } catch (const std::exception& e) {
-            QMessageBox::warning(this, "Database Error", QString("Failed to retrieve item details: %1").arg(e.what()));
+        Item item = db.getItem(itemID);
+        if (item.getBudgetID() == currentBudgetID) {
+            navigateToPage(6);
+        } else {
+            QMessageBox::warning(this, "Error", "Selected item does not belong to the current budget.");
         }
     } else {
         QMessageBox::warning(this, "Selection Needed", "Please select an item to edit.");
@@ -252,7 +260,8 @@ void MainWindow::on_editItemSaveButton_clicked()
         return;
     }
 
-    Item newItem(currentBudgetID,itemName,categoryID,itemAmount);
+    Item newItem(itemName,categoryID,itemAmount);
+
     if(db.updateItem(newItem,currentBudgetID))
     {
         QMessageBox::information(this, "Success", "Item added successfully.");

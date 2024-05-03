@@ -12,22 +12,22 @@ class databaseManager
 {
 private:
     QSqlDatabase db;
-
 public:
     databaseManager(const QString& path);
     ~databaseManager();
     void initializeDatabase();
     bool addItem(const Item& item);
     bool addBudget(const Budget& budget);
-    Budget getBudget(int budgetID);
+    Budget getBudget(int BudgetID);
     QList<Budget> getAllBudgets();
     QList<Item> getItemsByBudget(int budgetID);
     Item getItem(int itemID);
     bool updateBudget(const Budget& budget);
-    bool updateItem(const Item& item, int currentBudgetID);
-    bool deleteBudget(int budgetID);
+    bool updateItem(const Item& item);
+    bool deleteBudget(const QString& budgetName);
     bool deleteItem(int itemID);
-    int getBudgetIDByName(const QString& name);
+    QSqlDatabase& getDatabase(){ return db;}
+    int getBudgetIdByItem(int itemID);
 };
 
 #endif // DATABASEMANAGEMENT_H

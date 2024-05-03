@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/resource">
+        <file alias="img">image/Bitcoin.svg.png</file>
+    </qresource>
+</RCC>

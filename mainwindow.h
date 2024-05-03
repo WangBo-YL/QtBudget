@@ -16,6 +16,9 @@
 #include <QInputDialog>
 #include "databaseManager.h"
 
+
+//一些关于new item的思考， 设计思路， 如果Dropbox有内容，则可以新建item，并选择新建到哪个budget，
+//如果没有budget， 在尝试保存的时候弹出提示框，并且失败。
 QT_BEGIN_NAMESPACE
 namespace Ui
 {
@@ -28,17 +31,18 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-     MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 private:
     void navigateToPage(int pageIndex);
     void returnToHomepage();
     void updateItemList(int currentBudgetID);
     void updateBudgetList();
-
+    int getBudgetID(const Item& item);
+    int findItemIndex(QListWidgetItem* clickedItem);
 
 private slots:
-    void on_itemSelected();
+    void on_itemSelected(QListWidgetItem* item);
 
     void on_BudgetButton_clicked();
 
@@ -68,7 +72,7 @@ private slots:
 
     void on_cancelEditItemButton_clicked();
 
-    void on_budgetSelected();
+    void on_budgetSelected(int budgetID);
 
     void on_editBudgetButton_clicked();
 
@@ -78,8 +82,10 @@ private:
     Ui::MainWindow *ui;
     databaseManager db;
     int currentBudgetID;
-    QString currentBudgetName;
-    Budget* currentBudget;
-
+    QList<Budget> budgets;
+    QList<Item> items;
+    QListWidget* listWidget;
+    QListWidgetItem* itemListWidget;
+    QListWidgetItem* budgetListWidget;
 };
 #endif // MAINWINDOW_H

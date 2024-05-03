@@ -37,3 +37,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 # INCLUDEPATH += $$PWD/sqlite3
 # DEPENDPATH += $$PWD/sqlite3
+
+RESOURCES += \
+    resource.qrc

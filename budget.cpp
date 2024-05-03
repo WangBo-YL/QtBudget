@@ -1,11 +1,11 @@
 #include"budget.h"
 
-Budget::Budget(const QString& name, double total = 0):name(name),totalAmount(total)
+Budget::Budget(const QString& name, double total = 0):name(name),total(total)
 {
 }
 
 Budget::Budget(int id, const QString& name, double total)
-    :budgetID(id),name(name),totalAmount(total)
+    :budgetID(id),name(name),total(total)
 {
 
 }
@@ -15,7 +15,7 @@ int Budget::getBudgetID()const
     return budgetID;
 }
 
-const QString Budget::getName() const
+QString Budget::getName() const
 {
     return name;
 }
@@ -27,7 +27,7 @@ void Budget::setName(const QString& name)
 
 double Budget::getTotal() const
 {
-    return totalAmount;
+    return total;
 }
 
 void Budget::setBudgetID(int id)
@@ -37,5 +37,5 @@ void Budget::setBudgetID(int id)
 
 void Budget::setTotal(double total)
 {
-    totalAmount = total;
+    this->total = total;
 }
