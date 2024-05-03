@@ -7,23 +7,23 @@ class Item
 private:
     int itemID;
     int budgetID;
-    double cap;
     QString name;
+    double cap;
     double itemTotal;
 
 public:
-    Item(int itemID, int budgetID,const QString& name, double amount);
-    Item(const QString& name, double amount, int budgetID);
+    Item(int itemID, int budgetID,const QString& name, double cap, double total);
+    Item(int budgetID,const QString& name, double cap,double total);
     void setName(const QString& newName);
-    void setAmount(double Amount);
-    void setCategoryID(int categoryID);
+    void setCap(double cap);
+    void setTotal(double total);
     void setBudgetID(int budgetID);
-    void setItemID(int itemID);
     QString getName() const;
-    double getAmount() const ;
+    double getCap() const ;
+    double getTotal() const;
     int getItemID() const;
     int getBudgetID() const;
-    int getCategoryID() const;
+
     bool operator==(const Item& other)
     {
         return this->getItemID() == other.getItemID();

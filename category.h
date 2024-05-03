@@ -4,16 +4,19 @@
 class Category
 {
     public:
-    Category(int id,const QString& name);
+    Category(const QString& name,int budgetID,double total);
+        Category(int categoryID, int budgetID, const QString& name, double total);
     int getCategoryID() const;
     QString getName() const;
+    int getBudgetID() const;
     void setName(const QString& name);
-    void setCategoryID(int id);
+    void setTotalSpent(double total);
+    double getTotalSpent() const;
 
     private:
         int categoryID;
-        QString name;
         int budgetID;
+        QString name;
         double totalSpent;
 };
 

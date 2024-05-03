@@ -1,7 +1,11 @@
 #include "category.h"
 
-Category::Category(int id, const QString& name)
-    :categoryID(id), name(name)
+Category::Category(const QString& name, int budgetID, double total)
+    :budgetID(budgetID),name(name),totalSpent(total)
+{}
+
+Category::Category(int categoryID, int budgetID, const QString& name, double total)
+    : categoryID(categoryID),budgetID(budgetID),name(name),totalSpent(total)
 {}
 
 int Category::getCategoryID() const
@@ -19,7 +23,17 @@ void Category::setName(const QString& name)
     this->name = name;
 }
 
-void Category::setCategoryID(int id)
+void Category::setTotalSpent(double total)
 {
-    categoryID = id;
+    totalSpent = total;
+}
+
+double Category::getTotalSpent() const
+{
+    return totalSpent;
+}
+
+int Category::getBudgetID() const
+{
+    return budgetID;
 }

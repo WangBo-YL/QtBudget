@@ -35,22 +35,24 @@ void databaseManager::initializeDatabase()
     bool isBuilt = query.exec("CREATE TABLE IF NOT EXISTS budget ("
                               "budgetID INTEGER PRIMARY KEY AUTOINCREMENT, "
                               "budgetName VARCHAR(100) NOT NULL, "
-                              "total DOUBLE(10, 2) NOT NULL)");
+                              "total DOUBLE NOT NULL, "
+                              "remainingAmount DOUBLE NOT NULL);");
+
     if (isBuilt) {
         qDebug() << "Budget table created or already exists";
     } else {
-        qDebug() << "Failed to create budget table:" << query.lastError().text();
+        qDebug() << "Failed to create budget table:" <<                 query.lastError().text();
     }
 
     // create item table
     isBuilt = query.exec("CREATE TABLE IF NOT EXISTS item ("
                          "itemID INTEGER PRIMARY KEY AUTOINCREMENT, "
+                         "budgetID INTEGER NOT NULL, "
                          "itemName VARCHAR(100) NOT NULL, "
-                         "amount DOUBLE(10, 2) NOT NULL, "
-                         "budgetID INTEGER, "
-                         "categoryID INTEGER, "
-                         "FOREIGN KEY (budgetID) REFERENCES budget(budgetID), "
-                         "FOREIGN KEY (categoryID) REFERENCES category(categoryID))");
+                         "cap DOUBLE(10,2) NOT NULL CHECK (cap <= 100), "
+                         "itemTotal DOUBLE(10,2) NOT NULL, "
+                         "FOREIGN KEY (budgetID) REFERENCES budget(budgetID))");
+
     if (isBuilt) {
         qDebug() << "Item table created or already exists";
     } else {
@@ -60,29 +62,15 @@ void databaseManager::initializeDatabase()
     // create category table
     isBuilt = query.exec("CREATE TABLE IF NOT EXISTS category ("
                          "categoryID INTEGER PRIMARY KEY AUTOINCREMENT, "
-                         "categoryName VARCHAR(100) NOT NULL)");
+                         "budgetID INTEGER NOT NULL, "
+                         "categoryName VARCHAR(100) NOT NULL, "
+                         "totalSpent DOUBLE NOT NULL, "
+                         "FOREIGN KEY (budgetID) REFERENCES budget(budgetID))");
+
     if (isBuilt) {
         qDebug() << "Category table created or already exists";
     } else {
         qDebug() << "Failed to create category table:" << query.lastError().text();
-    }
-
-    if (isBuilt) {
-        QSqlQuery checkQuery("SELECT COUNT(*) FROM category");
-        if (checkQuery.next() && checkQuery.value(0).toInt() == 0) {
-            // No categories exist, insert them
-            bool inserted = query.exec("INSERT INTO category (categoryName) VALUES "
-                                       "('Grocery'), ('Transportation'), ('Housing'), "
-                                       "('Utilities'), ('Food'), ('Clothing'), "
-                                       "('Vehicle'), ('Entertainment')");
-            if (inserted) {
-                qDebug() << "Categories initialized successfully";
-            } else {
-                qDebug() << "Failed to insert categories:" << query.lastError().text();
-            }
-        } else {
-            qDebug() << "Categories already exist";
-        }
     }
 
 }
@@ -99,11 +87,11 @@ bool databaseManager::addItem(const Item& item)
     db.transaction();  // Start transaction
 
     // First, insert the new item
-    query.prepare("INSERT INTO item (budgetID, itemName, amount, categoryID) VALUES (?, ?, ?, ?)");
+    query.prepare("INSERT INTO item (budgetID, itemName, cap, itemTotal) VALUES (?, ?, ?, ?)");
     query.addBindValue(item.getBudgetID());
     query.addBindValue(item.getName());
-    query.addBindValue(item.getAmount());
-    query.addBindValue(item.getCategoryID());
+    query.addBindValue(item.getCap());
+    query.addBindValue(item.getTotal());
 
     if (!query.exec()) {
         db.rollback();  // Rollback if execute failed
@@ -112,8 +100,8 @@ bool databaseManager::addItem(const Item& item)
     }
 
     // Second, update the total amount of the budget
-    query.prepare("UPDATE budget SET total = total + ? WHERE budgetID = ?");
-    query.addBindValue(item.getAmount());
+    query.prepare("UPDATE budget SET remainingAmount = total - ? WHERE budgetID = ?");
+    query.addBindValue(item.getTotal());
     query.addBindValue(item.getBudgetID());
 
     if (!query.exec()) {
@@ -125,6 +113,7 @@ bool databaseManager::addItem(const Item& item)
     db.commit();  // Success and commit
     return true;
 }
+
 
 
 bool databaseManager::addBudget(const Budget& budget)
