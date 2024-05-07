@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>822</width>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,66 +24,66 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
-    <widget class="QWidget" name="page0">
+    <widget class="QWidget" name="mainMenuPage">
      <widget class="QPushButton" name="budgetMenuButton">
       <property name="geometry">
        <rect>
-        <x>70</x>
-        <y>200</y>
-        <width>281</width>
-        <height>81</height>
+        <x>290</x>
+        <y>130</y>
+        <width>191</width>
+        <height>61</height>
        </rect>
       </property>
       <property name="text">
-       <string>Budget Menu</string>
+       <string>Budget</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="menuButton2">
+     <widget class="QPushButton" name="expenseMenuButton">
       <property name="geometry">
        <rect>
-        <x>70</x>
-        <y>310</y>
-        <width>281</width>
-        <height>81</height>
+        <x>290</x>
+        <y>210</y>
+        <width>191</width>
+        <height>61</height>
        </rect>
       </property>
       <property name="text">
        <string>Expense</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="menuButton2_2">
+     <widget class="QPushButton" name="reportMenuButton">
       <property name="geometry">
        <rect>
-        <x>400</x>
-        <y>310</y>
-        <width>281</width>
-        <height>81</height>
+        <x>290</x>
+        <y>450</y>
+        <width>191</width>
+        <height>61</height>
        </rect>
       </property>
       <property name="text">
-       <string>menu button4</string>
+       <string>Reports</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="budgetMenuButton_2">
+     <widget class="QPushButton" name="savingsMenuButton">
       <property name="geometry">
        <rect>
-        <x>400</x>
-        <y>200</y>
-        <width>281</width>
-        <height>81</height>
+        <x>290</x>
+        <y>290</y>
+        <width>191</width>
+        <height>61</height>
        </rect>
       </property>
       <property name="text">
-       <string>menu button 3</string>
+       <string>Savings</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_7">
+     <widget class="QLabel" name="TitleLabel">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>50</y>
+        <x>190</x>
+        <y>20</y>
         <width>391</width>
         <height>91</height>
        </rect>
@@ -102,8 +102,21 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
+     <widget class="QPushButton" name="transactionHistoryButton">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>370</y>
+        <width>191</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Transaction History</string>
+      </property>
+     </widget>
     </widget>
-    <widget class="QWidget" name="page1">
+    <widget class="QWidget" name="BudgetMenuPage">
      <widget class="QPushButton" name="newBudgetButton">
       <property name="geometry">
        <rect>
@@ -127,7 +140,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Review Budgets</string>
+       <string>Budget List</string>
       </property>
      </widget>
      <widget class="QPushButton" name="returnFromBudgetMenuButton">
@@ -143,7 +156,7 @@
        <string>Return</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="newBudgetButton_2">
+     <widget class="QPushButton" name="newItemButton">
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -153,16 +166,16 @@
        </rect>
       </property>
       <property name="text">
-       <string>New Item</string>
+       <string>Add Item</string>
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page2">
+    <widget class="QWidget" name="BudgetCreatePage">
      <widget class="QPushButton" name="cancelCreateBudgetButton">
       <property name="geometry">
        <rect>
-        <x>300</x>
-        <y>340</y>
+        <x>320</x>
+        <y>360</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -171,17 +184,17 @@
        <string>Cancel</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="createNewBudgetButton">
+     <widget class="QPushButton" name="saveBudgetButton">
       <property name="geometry">
        <rect>
-        <x>410</x>
-        <y>340</y>
+        <x>430</x>
+        <y>360</y>
         <width>75</width>
         <height>24</height>
        </rect>
       </property>
       <property name="text">
-       <string>Create</string>
+       <string>Save</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="newBudgetNameInput">
@@ -194,7 +207,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="newBudgetNameLabel">
+     <widget class="QLabel" name="budgetNameLabel">
       <property name="geometry">
        <rect>
         <x>190</x>
@@ -216,7 +229,7 @@
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="newBudgetNameLabel_2">
+     <widget class="QLabel" name="newBudgetTotalLabel">
       <property name="geometry">
        <rect>
         <x>190</x>
@@ -238,7 +251,7 @@
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="newBudgetNameInput_2">
+     <widget class="QLineEdit" name="newBudgetTotalInput">
       <property name="geometry">
        <rect>
         <x>330</x>
@@ -249,8 +262,8 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page3">
-     <widget class="QPushButton" name="finishAddItemButton">
+    <widget class="QWidget" name="ItemAddedPage">
+     <widget class="QPushButton" name="cancelAddItemButton">
       <property name="geometry">
        <rect>
         <x>300</x>
@@ -260,7 +273,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>finish</string>
+       <string>Cancel</string>
       </property>
      </widget>
      <widget class="QPushButton" name="addItemButton">
@@ -273,20 +286,20 @@
        </rect>
       </property>
       <property name="text">
-       <string>add</string>
+       <string>Finish</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="budgetComboBox">
       <property name="geometry">
        <rect>
         <x>260</x>
         <y>90</y>
-        <width>281</width>
+        <width>291</width>
         <height>31</height>
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="budgetBoxLabel">
       <property name="geometry">
        <rect>
         <x>140</x>
@@ -308,7 +321,7 @@
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="newItemNameInput">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -318,7 +331,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="newItemNameLabel">
       <property name="geometry">
        <rect>
         <x>150</x>
@@ -340,7 +353,7 @@
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_3">
+     <widget class="QLabel" name="newItemCapLabel">
       <property name="geometry">
        <rect>
         <x>150</x>
@@ -362,7 +375,7 @@
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="newItemLimitInput">
       <property name="geometry">
        <rect>
         <x>490</x>
@@ -375,7 +388,7 @@
        <string/>
       </property>
      </widget>
-     <widget class="QLabel" name="label_4">
+     <widget class="QLabel" name="newItemTotalLabel">
       <property name="geometry">
        <rect>
         <x>150</x>
@@ -397,7 +410,7 @@
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_3">
+     <widget class="QLineEdit" name="newItemTotalInput">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -410,7 +423,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QSlider" name="horizontalSlider">
+     <widget class="QSlider" name="newItemCapSlider">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -423,7 +436,7 @@
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
-     <widget class="QLabel" name="label_5">
+     <widget class="QLabel" name="totalOptionalLabel">
       <property name="geometry">
        <rect>
         <x>560</x>
@@ -442,12 +455,12 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page4">
-     <widget class="QPushButton" name="addItemToBudgetButton">
+    <widget class="QWidget" name="BudgetListPage">
+     <widget class="QPushButton" name="budgetDetaiButton">
       <property name="geometry">
        <rect>
         <x>70</x>
-        <y>80</y>
+        <y>100</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -460,7 +473,7 @@
       <property name="geometry">
        <rect>
         <x>160</x>
-        <y>70</y>
+        <y>90</y>
         <width>491</width>
         <height>391</height>
        </rect>
@@ -469,21 +482,30 @@
      <widget class="QLabel" name="budgetListLabel">
       <property name="geometry">
        <rect>
-        <x>360</x>
+        <x>350</x>
         <y>30</y>
-        <width>71</width>
+        <width>101</width>
         <height>31</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
       <property name="text">
        <string>Budget List</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
      <widget class="QPushButton" name="deleteBudgetButton">
       <property name="geometry">
        <rect>
         <x>70</x>
-        <y>180</y>
+        <y>200</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -496,7 +518,7 @@
       <property name="geometry">
        <rect>
         <x>70</x>
-        <y>130</y>
+        <y>150</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -508,19 +530,19 @@
      <widget class="QPushButton" name="returnFromBudgetListButton">
       <property name="geometry">
        <rect>
-        <x>580</x>
-        <y>500</y>
-        <width>75</width>
-        <height>24</height>
+        <x>30</x>
+        <y>20</y>
+        <width>81</width>
+        <height>31</height>
        </rect>
       </property>
       <property name="text">
-       <string>return</string>
+       <string>Return</string>
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page5">
-     <widget class="QListWidget" name="listWidget">
+    <widget class="QWidget" name="itemListPage">
+     <widget class="QListWidget" name="itemListWidget">
       <property name="geometry">
        <rect>
         <x>240</x>
@@ -529,25 +551,21 @@
         <height>341</height>
        </rect>
       </property>
+      <item>
+       <property name="text">
+        <string>New Item</string>
+       </property>
+       <property name="icon">
+        <iconset theme="accessories-calculator" resource="resource.qrc">
+         <normaloff>:/resource/image/cash.png</normaloff>:/resource/image/cash.png</iconset>
+       </property>
+      </item>
      </widget>
-     <widget class="QPushButton" name="addItemToBudgetButton_2">
+     <widget class="QPushButton" name="editItemButton">
       <property name="geometry">
        <rect>
-        <x>120</x>
+        <x>150</x>
         <y>130</y>
-        <width>75</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Detail</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="editBudgetButton_2">
-      <property name="geometry">
-       <rect>
-        <x>120</x>
-        <y>180</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -556,11 +574,11 @@
        <string>Edit</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="deleteBudgetButton_2">
+     <widget class="QPushButton" name="deleteItemButton">
       <property name="geometry">
        <rect>
-        <x>120</x>
-        <y>230</y>
+        <x>150</x>
+        <y>170</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -569,14 +587,20 @@
        <string>Delete</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_6">
+     <widget class="QLabel" name="ItemListLabel">
       <property name="geometry">
        <rect>
-        <x>330</x>
-        <y>40</y>
+        <x>340</x>
+        <y>50</y>
         <width>141</width>
         <height>41</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="text">
        <string>Item List</string>
@@ -585,11 +609,11 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QPushButton" name="deleteBudgetButton_3">
+     <widget class="QPushButton" name="returnFromItemListButton">
       <property name="geometry">
        <rect>
-        <x>510</x>
-        <y>480</y>
+        <x>40</x>
+        <y>30</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -599,32 +623,60 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page6">
-     <widget class="QLineEdit" name="newBudgetNameInput_4">
+    <widget class="QWidget" name="expenseMenuPage">
+     <widget class="QPushButton" name="addExpenditureButton">
       <property name="geometry">
        <rect>
-        <x>320</x>
-        <y>170</y>
+        <x>280</x>
+        <y>220</y>
         <width>211</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Add Expenditure</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="returnFromExpenseMenuButton">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>50</y>
+        <width>91</width>
         <height>41</height>
        </rect>
       </property>
+      <property name="text">
+       <string>Return</string>
+      </property>
      </widget>
-     <widget class="QLineEdit" name="newBudgetNameInput_3">
+    </widget>
+    <widget class="QWidget" name="addExpPage">
+     <widget class="QLineEdit" name="expenseDescriptionInput">
       <property name="geometry">
        <rect>
         <x>320</x>
-        <y>90</y>
+        <y>180</y>
         <width>211</width>
-        <height>41</height>
+        <height>31</height>
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="newBudgetNameLabel_3">
+     <widget class="QLineEdit" name="expenseAmountInput">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>110</y>
+        <width>211</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="expenseAmountLabel">
       <property name="geometry">
        <rect>
         <x>180</x>
-        <y>100</y>
+        <y>110</y>
         <width>111</width>
         <height>21</height>
        </rect>
@@ -642,7 +694,7 @@
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="newBudgetNameLabel_4">
+     <widget class="QLabel" name="expenseDescriptionLabel">
       <property name="geometry">
        <rect>
         <x>180</x>
@@ -664,21 +716,21 @@
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QDateEdit" name="dateEdit">
+     <widget class="QDateEdit" name="expenseDateEdit">
       <property name="geometry">
        <rect>
-        <x>310</x>
-        <y>290</y>
-        <width>221</width>
+        <x>320</x>
+        <y>310</y>
+        <width>131</width>
         <height>31</height>
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="confirmExpenseButton">
       <property name="geometry">
        <rect>
-        <x>480</x>
-        <y>430</y>
+        <x>430</x>
+        <y>420</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -687,17 +739,604 @@
        <string>OK</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="cancelExpenseButton">
       <property name="geometry">
        <rect>
-        <x>370</x>
-        <y>430</y>
+        <x>320</x>
+        <y>420</y>
         <width>75</width>
         <height>24</height>
        </rect>
       </property>
       <property name="text">
        <string>Cancel</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="ItemCombobox">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>250</y>
+        <width>211</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="itemComboboxLabel">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>250</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Item:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="inExpensePageLabel">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Expense</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="reportPage">
+     <widget class="QToolBox" name="reportToolBox">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>60</y>
+        <width>701</width>
+        <height>461</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <widget class="QWidget" name="BudgetReportWidget" native="true">
+       <attribute name="label">
+        <string/>
+       </attribute>
+       <widget class="QTableWidget" name="budgetReportTableWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>701</width>
+          <height>361</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="savingReportWdiget" native="true">
+       <attribute name="label">
+        <string/>
+       </attribute>
+       <widget class="QTableWidget" name="savingReportWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>701</width>
+          <height>361</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="itemReportWidget" native="true">
+       <attribute name="label">
+        <string/>
+       </attribute>
+       <widget class="QTableWidget" name="itemReportTableWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>701</width>
+          <height>341</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="returnFromReportPageButton">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>10</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Return</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="transactionsPage">
+     <widget class="QTableWidget" name="transactionListTableWidget">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>110</y>
+        <width>441</width>
+        <height>361</height>
+       </rect>
+      </property>
+      <column>
+       <property name="text">
+        <string>Money Flow</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/resource/image/cash.png</normaloff>:/resource/image/cash.png</iconset>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Total</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Item</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QLabel" name="transactionListLabel">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>50</y>
+        <width>191</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Transactions History</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="returnFromTransPage">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>40</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Return</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="savingsPage">
+     <widget class="QPushButton" name="newSavingPlanButton">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>140</y>
+        <width>211</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>New Savings Plan</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="savingsListButton">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>240</y>
+        <width>211</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Savings Plan List</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="returnFromSavingButton">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>40</y>
+        <width>101</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Return</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="addIncomeButton">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>340</y>
+        <width>211</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Add Income</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="newSavingsPage">
+     <widget class="QPushButton" name="finishAddSavingPlanButton">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>360</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Finish</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="savingGoalLabel">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>110</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Saving Goal:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="cancelSavingPlanButton">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>360</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Cancel</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="savingDescriptionLabel">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>180</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Description:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="savingDescriptionInput">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>180</y>
+        <width>291</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="savingStartDateEdit">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>260</y>
+        <width>81</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="savingGoalInput">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>110</y>
+        <width>291</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="savingStartDateLabel">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>260</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Start Date:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="savingEndDateEdit">
+      <property name="geometry">
+       <rect>
+        <x>490</x>
+        <y>260</y>
+        <width>81</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="savingEndDateLabel">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>260</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>End Date:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="savingsListPage">
+     <widget class="QPushButton" name="returnFromSavingsListButton">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>50</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Return</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="editSavingListButton">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>150</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit</string>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="savingsListWidget">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>130</y>
+        <width>351</width>
+        <height>341</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>Saving Plans</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/resource/image/money.png</normaloff>:/resource/image/money.png</iconset>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="savingsListLabel">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>70</y>
+        <width>141</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Savings Plans</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="deleteSavingsListButton">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>190</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Delete</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="newIncomePage">
+     <widget class="QPushButton" name="cancelAddIncomeButton">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>370</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Cancel</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="incomeDescriptionLabel">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>190</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Description:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="newIncomeLabel">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>120</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Income:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="finishAddIncomeButton">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>370</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Finish</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="newIncomeInput">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>120</y>
+        <width>291</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="incomeDescriptionInput">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>190</y>
+        <width>291</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="intcomeDateEdit">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>270</y>
+        <width>271</width>
+        <height>31</height>
+       </rect>
       </property>
      </widget>
     </widget>
@@ -709,12 +1348,14 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections>
   <connection>
-   <sender>horizontalSlider</sender>
+   <sender>newItemCapSlider</sender>
    <signal>sliderMoved(int)</signal>
-   <receiver>horizontalSlider</receiver>
+   <receiver>newItemCapSlider</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -724,6 +1365,22 @@
     <hint type="destinationlabel">
      <x>468</x>
      <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>newItemCapSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>newItemLimitInput</receiver>
+   <slot>showMaximized()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>446</x>
+     <y>250</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>528</x>
+     <y>260</y>
     </hint>
    </hints>
   </connection>

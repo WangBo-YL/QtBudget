@@ -7,8 +7,8 @@ Budget::Budget(const QString& name, double total):name(name),total(total)
 {
 }
 
-Budget::Budget(int id, const QString& name, double total)
-    :budgetID(id),name(name),total(total)
+Budget::Budget(int id, const QString& name, double total, double remain)
+    :budgetID(id),name(name),remainingAmount(remain),total(total)
 {
 
 }

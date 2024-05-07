@@ -4,9 +4,10 @@
 class Budget
 {
     public:
+    Budget(){this->budgetID = 0,this->name="", this->total = 0.0, this->remainingAmount = 0.0;}
         Budget(const QString& name);
         Budget(const QString& name, double total);
-        Budget(int id, const QString& name, double total);
+        Budget(int id, const QString& name, double total, double remain);
         int getBudgetID() const;
         QString getName() const;
         double getTotal() const;
@@ -28,7 +29,7 @@ class Budget
     int budgetID;
     QString name;
     double remainingAmount;
-    double total = 0;
+    double total;
     void updateRemaining()
     {
         remainingAmount = total;

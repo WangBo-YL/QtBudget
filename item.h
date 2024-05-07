@@ -12,6 +12,7 @@ private:
     double itemTotal;
 
 public:
+    Item(){this->itemID =0, this->budgetID = 0,this->name = "", this->cap = 0.0, this->itemTotal = 0.0;}
     Item(int itemID, int budgetID,const QString& name, double cap, double total);
     Item(int budgetID,const QString& name, double cap,double total);
     void setName(const QString& newName);

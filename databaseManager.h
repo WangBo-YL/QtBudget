@@ -18,16 +18,19 @@ public:
     void initializeDatabase();
     bool addItem(const Item& item);
     bool addBudget(const Budget& budget);
-    Budget getBudget(int BudgetID);
+    Budget getBudget(const QString& name);
     QList<Budget> getAllBudgets();
     QList<Item> getItemsByBudget(int budgetID);
-    Item getItem(int itemID);
+    Item getItem(const QString& name);
     bool updateBudget(const Budget& budget);
     bool updateItem(const Item& item);
     bool deleteBudget(const QString& budgetName);
     bool deleteItem(int itemID);
     QSqlDatabase& getDatabase(){ return db;}
-    int getBudgetIdByItem(int itemID);
+    int getBudgetIdByItem(const Item& item);
+    int getItemID(const QString& name);
+    bool updateItemTotal(double Transaction, const Item& item);
+    bool updateBudgetTotal(double newTotal, const Budget& budget);
 };
 
 #endif // DATABASEMANAGEMENT_H
