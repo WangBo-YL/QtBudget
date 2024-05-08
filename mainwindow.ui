@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="mainMenuPage">
      <widget class="QPushButton" name="budgetMenuButton">
@@ -814,7 +814,15 @@
       <property name="styleSheet">
        <string notr="true"/>
       </property>
-      <widget class="QWidget" name="BudgetReportWidget" native="true">
+      <widget class="QWidget" name="BudgetReportWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>98</width>
+         <height>28</height>
+        </rect>
+       </property>
        <attribute name="label">
         <string/>
        </attribute>
@@ -829,7 +837,15 @@
         </property>
        </widget>
       </widget>
-      <widget class="QWidget" name="savingReportWdiget" native="true">
+      <widget class="QWidget" name="savingReportWdiget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>98</width>
+         <height>28</height>
+        </rect>
+       </property>
        <attribute name="label">
         <string/>
        </attribute>
@@ -844,7 +860,15 @@
         </property>
        </widget>
       </widget>
-      <widget class="QWidget" name="itemReportWidget" native="true">
+      <widget class="QWidget" name="itemReportWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>98</width>
+         <height>28</height>
+        </rect>
+       </property>
        <attribute name="label">
         <string/>
        </attribute>
@@ -1351,38 +1375,5 @@
  <resources>
   <include location="resource.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>newItemCapSlider</sender>
-   <signal>sliderMoved(int)</signal>
-   <receiver>newItemCapSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>377</x>
-     <y>252</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>468</x>
-     <y>254</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>newItemCapSlider</sender>
-   <signal>sliderMoved(int)</signal>
-   <receiver>newItemLimitInput</receiver>
-   <slot>showMaximized()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>446</x>
-     <y>250</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>528</x>
-     <y>260</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

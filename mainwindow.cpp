@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     , db("budget.db")
 {
     ui->setupUi(this);
+    updateBudgetBox();
     // connect(ui->saveBudgetButton, &QPushButton::clicked, this, &MainWindow::on_saveBudgetButton_clicked);
 }
 
@@ -22,6 +23,15 @@ void MainWindow::navigateToPage(int pageIndex)
     ui->stackedWidget->setCurrentIndex(pageIndex);
 }
 
+void MainWindow::updateBudgetBox()
+{
+    QList<Budget> budgets = db.getAllBudgets();
+    for(auto budget: budgets)
+    {
+        ui->budgetComboBox->addItem(budget.getName());
+    }
+
+}
 
 void MainWindow::on_budgetMenuButton_clicked()
 {
@@ -104,6 +114,7 @@ void MainWindow::on_saveBudgetButton_clicked()
     {
         try {
             Budget budget(text,total);
+
             if(db.addBudget(budget))
             {
                 qDebug() << "Budget Name: " <<text << ", Total : " << total;

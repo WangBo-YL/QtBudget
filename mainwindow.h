@@ -35,13 +35,11 @@ public:
     ~MainWindow();
 private:
     void navigateToPage(int pageIndex);
-    void returnToHomepage();
     void updateItemList(int currentBudgetID);
     void updateBudgetList();
+    void updateBudgetBox();
 
 private slots:
-
-
 
     void on_budgetMenuButton_clicked();
 
