@@ -30,7 +30,8 @@ public:
     int getBudgetIdByItem(const Item& item);
     int getItemID(const QString& name);
     bool updateItemTotal(double Transaction, const Item& item);
-    bool updateBudgetTotal(double newTotal, const Budget& budget);
+    bool updateBudgetTotal(double spend, const Budget& budget);
+
 };
 
 #endif // DATABASEMANAGEMENT_H

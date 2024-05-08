@@ -30,10 +30,6 @@ class Budget
     QString name;
     double remainingAmount;
     double total;
-    void updateRemaining()
-    {
-        remainingAmount = total;
-    }
 };
 
 #endif

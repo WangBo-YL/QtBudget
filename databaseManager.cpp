@@ -135,7 +135,6 @@ bool databaseManager::addItem(const Item& item)
 }
 
 
-
 bool databaseManager::addBudget(const Budget& budget)
 {
     if (!db.isOpen()) {
@@ -161,7 +160,7 @@ bool databaseManager::addBudget(const Budget& budget)
     query.prepare("INSERT INTO budget (budgetName, total, remainingAmount) VALUES (?, ?, ?)");
     query.addBindValue(budget.getName());
     query.addBindValue(budget.getTotal());
-    query.addBindValue(budget.getRemaining());
+    query.addBindValue(budget.getTotal());
 
     if (!query.exec()) {
         db.rollback();
@@ -293,10 +292,9 @@ bool databaseManager::updateBudget(const Budget& budget) {
     QSqlQuery query(db);
     db.transaction();  // Start transaction
 
-    query.prepare("UPDATE budget SET name = ?, total = ?, remainingAmount = ? WHERE budgetID = ?");
+    query.prepare("UPDATE budget SET name = ?, total = ? WHERE budgetID = ?");
     query.addBindValue(budget.getName());
     query.addBindValue(budget.getTotal());
-    query.addBindValue(budget.getRemaining());
     query.addBindValue(budget.getBudgetID());
 
     if (!query.exec()) {
@@ -501,7 +499,7 @@ bool databaseManager::updateItemTotal(double transaction, const Item& item)
 
 }
 
-bool databaseManager::updateBudgetTotal(double newTotal, const Budget& budget)
+bool databaseManager::updateBudgetTotal(double spend, const Budget& budget)
 {
     if(!db.isOpen())
     {
@@ -512,12 +510,22 @@ bool databaseManager::updateBudgetTotal(double newTotal, const Budget& budget)
     QSqlQuery query(db);
     db.transaction();
     query.prepare("UPDATE budget SET total = ? WHERE budgetID = ? ");
-    query.addBindValue(newTotal);
+    query.addBindValue(budget.getTotal());
     query.addBindValue(budget.getBudgetID());
 
     if(!query.exec()){
         db.rollback();
         qDebug() << "Update budget total failed.";
+        return false;
+    }
+
+    query.prepare("UPDATE budget SET remainingAmount = total - ? WHERE budgetID = ? ");
+    query.addBindValue(spend);
+    query.addBindValue(budget.getBudgetID());
+
+    if(!query.exec()){
+        db.rollback();
+        qDebug() << "Update budget remaining failed.";
         return false;
     }
 
