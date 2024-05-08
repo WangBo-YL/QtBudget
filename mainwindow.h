@@ -38,7 +38,8 @@ private:
     void updateItemList(int currentBudgetID);
     void updateBudgetList();
     void updateBudgetBox();
-
+    void updateCurrentBudget(const QString& budgetName);
+    void updateItemBox();
 private slots:
 
     void on_budgetMenuButton_clicked();
@@ -121,6 +122,7 @@ private:
     databaseManager db;
     Budget currentBudget;
     Item currentItem;
+    Expense expense;
     int currentPageIndex;
     int previousPageIndex;
 };

@@ -12,6 +12,7 @@ SOURCES += \
     budget.cpp \
     category.cpp \
     databaseManager.cpp \
+    expense.cpp \
     item.cpp \
     main.cpp \
     mainwindow.cpp
@@ -20,6 +21,7 @@ HEADERS += \
     budget.h \
     category.h \
     databaseManager.h \
+    expense.h \
     item.h \
     mainwindow.h
 

@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     updateBudgetBox();
+    updateItemBox();
     ui->newItemTotalInput->setText("0");
     // connect(ui->saveBudgetButton, &QPushButton::clicked, this, &MainWindow::on_saveBudgetButton_clicked);
 }
@@ -38,6 +39,31 @@ void MainWindow::updateBudgetBox()
         ui->budgetComboBox->addItem(budget.getName());
     }
 
+}
+
+void MainWindow::updateItemBox()
+{
+    ui->ItemCombobox->clear();
+    QList<QString> itemNameList = db.getAllItemNames();
+    if(itemNameList.isEmpty())
+    {
+        qDebug() << "No item found or database error.";
+        return;
+    }
+    for(const QString& itemName: itemNameList)
+    {
+        ui->ItemCombobox->addItem(itemName);
+    }
+}
+
+void MainWindow::updateCurrentBudget(const QString& name)
+{
+    try{
+        currentBudget = db.getBudget(name);
+    }catch(const std::runtime_error&e)
+    {
+        qDebug() << "Error updating budget: " << e.what();
+    }
 }
 
 void MainWindow::on_budgetMenuButton_clicked()
@@ -144,7 +170,7 @@ void MainWindow::on_saveBudgetButton_clicked()
         }
 
     }
-
+    updateBudgetBox();
     navigateToPage(1);
     previousPageIndex = 2;
 }
@@ -188,7 +214,7 @@ void MainWindow::on_cancelAddItemButton_clicked()
 void MainWindow::on_addItemButton_clicked()
 {
     QString budgetName = ui->budgetComboBox->currentText();
-    currentBudget = db.getBudget(budgetName);
+    updateCurrentBudget(budgetName);
     QString name = ui->newItemNameInput->text();
     double cap = ui->newItemLimitInput->text().toDouble();
     double total = ui->newItemTotalInput->text().toDouble();
@@ -196,6 +222,7 @@ void MainWindow::on_addItemButton_clicked()
     db.addItem(item);
     qDebug() << "You have successfully add a new Item to " << budgetName;
 
+    updateItemBox();
     ui->newBudgetNameInput->clear();
     ui->newItemLimitInput->clear();
     ui->newItemTotalInput->clear();
@@ -212,6 +239,19 @@ void MainWindow::on_cancelExpenseButton_clicked()
 
 void MainWindow::on_confirmExpenseButton_clicked()
 {
+    double amount = ui->expenseAmountInput->text().toDouble();
+    QString description = ui->expenseDescriptionInput->text();
+    QString itemName = ui->ItemCombobox->currentText();
+    int itemID = db.getItemID(itemName);
+    Expense expense(itemID,amount,description);
+    if(db.addExpense(expense))
+    {
+        qDebug() << "Add new expense to " << itemName << " successfull!" ;
+    }
+
+    ui->expenseAmountInput->clear();
+    ui->expenseDescriptionInput->clear();
+    ui->ItemCombobox->setCurrentIndex(0);
     navigateToPage(6);
     previousPageIndex = 7;
 }

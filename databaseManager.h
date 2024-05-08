@@ -8,6 +8,7 @@
 #include <QStandardPaths>
 #include "budget.h"
 #include "item.h"
+#include "expense.h"
 class databaseManager
 {
 private:
@@ -21,6 +22,8 @@ public:
     Budget getBudget(const QString& name);
     QList<Budget> getAllBudgets();
     QList<Item> getItemsByBudget(int budgetID);
+    QList<Item> getAllItems();
+    QList<QString> getAllItemNames();
     Item getItem(const QString& name);
     bool updateBudget(const Budget& budget);
     bool updateItem(const Item& item);
@@ -31,7 +34,7 @@ public:
     int getItemID(const QString& name);
     bool updateItemTotal(double Transaction, const Item& item);
     bool updateBudgetTotal(double spend, const Budget& budget);
-
+    bool addExpense(const Expense& expense);
 };
 
 #endif // DATABASEMANAGEMENT_H

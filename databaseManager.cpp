@@ -73,6 +73,20 @@ void databaseManager::initializeDatabase()
         qDebug() << "Failed to create category table:" << query.lastError().text();
     }
 
+    // create expense table
+    isBuilt = query.exec("CREATE TABLE IF NOT EXISTS expense ("
+                         "expenseID INTEGER PRIMARY KEY AUTOINCREMENT, "
+                         "itemID INTEGER NOT NULL, "
+                         "total DOUBLE NOT NULL, "
+                         "description TEXT, "
+                         "FOREIGN KEY (itemID) REFERENCES item(itemID));");
+
+    if (isBuilt) {
+        qDebug() << "Expense table created or already exists";
+    } else {
+        qDebug() << "Failed to create expense table:" << query.lastError().text();
+    }
+
 }
 
 
@@ -225,6 +239,53 @@ QList<Budget> databaseManager::getAllBudgets()
     }
     return budgets;
 }
+
+QList<Item> databaseManager::getAllItems()
+{
+    QList<Item> items;
+    if(!db.isOpen())
+    {
+        qDebug() << "Database not open";
+        throw std::runtime_error("Database is not open.");
+    }
+    QSqlQuery query(db);
+    query.prepare("SELECT itemID, budgetID, itemName, cap, itemTotal FROM item");
+    if (!query.exec()) {
+        qDebug() << "Failed to retrieve items:" << query.lastError();
+        throw std::runtime_error("Query failed.");
+    }
+    while (query.next()) {
+        int itemID = query.value(0).toInt();
+        int budgetID = query.value(1).toInt();
+        QString name = query.value(2).toString();
+        double cap = query.value(3).toDouble();
+        double total = query.value(5).toDouble();
+        items.append(Item(itemID,budgetID,name,cap,total));
+    }
+    return items;
+}
+
+QList<QString> databaseManager::getAllItemNames()
+{
+    QList<QString> itemNames;
+    if(!db.isOpen())
+    {
+        qDebug() << "Database not open";
+        throw std::runtime_error("Database is not open.");
+    }
+    QSqlQuery query(db);
+    query.prepare("SELECT itemName FROM item");
+    if (!query.exec()) {
+        qDebug() << "Failed to retrieve item names:" << query.lastError();
+        throw std::runtime_error("Query failed.");
+    }
+    while (query.next()) {
+        QString name = query.value(0).toString();
+        itemNames.append(name);
+    }
+    return itemNames;
+}
+
 
 QList<Item> databaseManager::getItemsByBudget(int budgetID)
 {
@@ -533,3 +594,59 @@ bool databaseManager::updateBudgetTotal(double spend, const Budget& budget)
     return true;
 }
 
+bool databaseManager::addExpense(const Expense& expense)
+{
+    if(!db.isOpen())
+    {
+        qDebug() << "Database not open";
+        throw std::runtime_error("Database is not open.");
+    }
+
+    QSqlQuery query(db);
+    db.transaction();
+
+    try {
+        // Insert the new expense
+        query.prepare("INSERT INTO expense (itemID, total, description) VALUES (?, ?, ?)");
+        query.addBindValue(expense.getItemID());
+        query.addBindValue(expense.getTotal());
+        query.addBindValue(expense.getDescription());
+        if (!query.exec()) {
+            throw std::runtime_error("Failed to insert expense: " + query.lastError().text().toStdString());
+        }
+
+        // Update the item total
+        query.prepare("UPDATE item SET itemTotal = itemTotal + ? WHERE itemID = ?");
+        query.addBindValue(expense.getTotal());
+        query.addBindValue(expense.getItemID());
+        if (!query.exec()) {
+            throw std::runtime_error("Failed to update item total: " + query.lastError().text().toStdString());
+        }
+
+        // Get the associated budgetID for the item
+        int budgetID;
+        query.prepare("SELECT budgetID FROM item WHERE itemID = ?");
+        query.addBindValue(expense.getItemID());
+        if (!query.exec() || !query.next()) {
+            throw std::runtime_error("Failed to find budgetID for item: " + query.lastError().text().toStdString());
+        }
+        budgetID = query.value(0).toInt();
+
+        // Update the budget remainingAmount
+        query.prepare("UPDATE budget SET remainingAmount = remainingAmount - ? WHERE budgetID = ?");
+        query.addBindValue(expense.getTotal());
+        query.addBindValue(budgetID);
+        if (!query.exec()) {
+            throw std::runtime_error("Failed to update budget remaining amount: " + query.lastError().text().toStdString());
+        }
+
+        // Commit transaction
+        db.commit();
+        qDebug() << "Expense added successfully and related totals updated.";
+        return true;
+    } catch (const std::runtime_error& e) {
+        db.rollback();
+        qDebug() << "Transaction failed: " << e.what();
+        return false;
+    }
+}
