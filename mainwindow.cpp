@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     updateBudgetBox();
+    ui->newItemTotalInput->setText("0");
     // connect(ui->saveBudgetButton, &QPushButton::clicked, this, &MainWindow::on_saveBudgetButton_clicked);
 }
 
@@ -25,8 +26,14 @@ void MainWindow::navigateToPage(int pageIndex)
 
 void MainWindow::updateBudgetBox()
 {
+    ui->budgetComboBox->clear();
     QList<Budget> budgets = db.getAllBudgets();
-    for(auto budget: budgets)
+    if(budgets.isEmpty())
+    {
+        qDebug() << "No budgets found or database error.";
+        return;
+    }
+    for(const Budget& budget: budgets)
     {
         ui->budgetComboBox->addItem(budget.getName());
     }
@@ -170,10 +177,6 @@ void MainWindow::on_deleteBudgetButton_clicked()
 }
 
 
-// void MainWindow::on_newItemCapSlider_sliderMoved(int position)
-// {
-
-// }
 
 
 void MainWindow::on_cancelAddItemButton_clicked()
@@ -184,6 +187,18 @@ void MainWindow::on_cancelAddItemButton_clicked()
 
 void MainWindow::on_addItemButton_clicked()
 {
+    QString budgetName = ui->budgetComboBox->currentText();
+    currentBudget = db.getBudget(budgetName);
+    QString name = ui->newItemNameInput->text();
+    double cap = ui->newItemLimitInput->text().toDouble();
+    double total = ui->newItemTotalInput->text().toDouble();
+    Item item(currentBudget.getBudgetID(),name,cap,total);
+    db.addItem(item);
+    qDebug() << "You have successfully add a new Item to " << budgetName;
+
+    ui->newBudgetNameInput->clear();
+    ui->newItemLimitInput->clear();
+    ui->newItemTotalInput->clear();
     navigateToPage(1);
     previousPageIndex = 3;
 }
@@ -314,4 +329,5 @@ void MainWindow::on_returnFromTransPage_clicked()
 {
     navigateToPage(0);
 }
+
 

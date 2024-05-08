@@ -71,8 +71,6 @@ private slots:
 
     void on_deleteBudgetButton_clicked();
 
-    // void on_newItemCapSlider_sliderMoved(int position);
-
     void on_cancelAddItemButton_clicked();
 
     void on_addItemButton_clicked();
@@ -116,6 +114,7 @@ private slots:
     void on_addIncomeButton_clicked();
 
     void on_returnFromTransPage_clicked();
+
 
 private:
     Ui::MainWindow *ui;

@@ -180,7 +180,7 @@ Budget databaseManager::getBudget (const QString& name)
     }
 
     QSqlQuery query(db);
-    query.prepare("SELECT budgetID, budgetName, total, remainingAmount, FROM budget WHERE budgetName = ?");
+    query.prepare("SELECT budgetID, budgetName, total, remainingAmount FROM budget WHERE budgetName = ?");
     query.addBindValue(name);
 
     if (!query.exec()) {

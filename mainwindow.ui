@@ -378,9 +378,9 @@
      <widget class="QLineEdit" name="newItemLimitInput">
       <property name="geometry">
        <rect>
-        <x>490</x>
+        <x>260</x>
         <y>240</y>
-        <width>61</width>
+        <width>291</width>
         <height>31</height>
        </rect>
       </property>
@@ -421,19 +421,6 @@
       </property>
       <property name="text">
        <string>0</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="newItemCapSlider">
-      <property name="geometry">
-       <rect>
-        <x>260</x>
-        <y>240</y>
-        <width>221</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
       </property>
      </widget>
      <widget class="QLabel" name="totalOptionalLabel">
@@ -819,8 +806,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>98</width>
-         <height>28</height>
+         <width>701</width>
+         <height>371</height>
         </rect>
        </property>
        <attribute name="label">
@@ -842,8 +829,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>98</width>
-         <height>28</height>
+         <width>100</width>
+         <height>30</height>
         </rect>
        </property>
        <attribute name="label">
@@ -865,8 +852,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>98</width>
-         <height>28</height>
+         <width>100</width>
+         <height>30</height>
         </rect>
        </property>
        <attribute name="label">
