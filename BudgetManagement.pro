@@ -15,15 +15,18 @@ SOURCES += \
     expense.cpp \
     item.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    saving.cpp
 
 HEADERS += \
     budget.h \
     category.h \
     databaseManager.h \
     expense.h \
+    income.h \
     item.h \
-    mainwindow.h
+    mainwindow.h \
+    saving.h
 
 FORMS += \
     mainwindow.ui

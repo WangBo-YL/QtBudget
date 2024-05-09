@@ -87,6 +87,31 @@ void databaseManager::initializeDatabase()
         qDebug() << "Failed to create expense table:" << query.lastError().text();
     }
 
+    // Create saving table
+    isBuilt = query.exec("CREATE TABLE IF NOT EXISTS saving ("
+                         "savingID INTEGER PRIMARY KEY AUTOINCREMENT, "
+                         "savingGoal DOUBLE NOT NULL, "
+                         "goalRemaining DOUBLE NOT NULL, "
+                         "description TEXT);");
+
+    if (isBuilt) {
+        qDebug() << "Saving table created or already exists";
+    } else {
+        qDebug() << "Failed to create Saving table:" << query.lastError().text();
+    }
+
+    // Create income table
+    isBuilt = query.exec("CREATE TABLE IF NOT EXISTS income ("
+                         "incomeID INTEGER PRIMARY KEY AUTOINCREMENT, "
+                         "savingID INTEGER NOT NULL, "
+                         "FOREIGN KEY (savingID) REFERENCES saving(savingID));");  // Removed savingGoal
+
+    if (isBuilt) {
+        qDebug() << "Income table created or already exists";
+    } else {
+        qDebug() << "Failed to create income table:" << query.lastError().text();
+    }
+
 }
 
 

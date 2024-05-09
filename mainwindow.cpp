@@ -291,7 +291,7 @@ void MainWindow::on_deleteItemButton_clicked()
 
 void MainWindow::on_cancelAddIncomeButton_clicked()
 {
-    navigateToPage(1);
+    navigateToPage(10);
 }
 
 
