@@ -79,6 +79,7 @@ void databaseManager::initializeDatabase()
                          "itemID INTEGER NOT NULL, "
                          "total DOUBLE NOT NULL, "
                          "description TEXT, "
+                         "date TEXT NOT NULL,"
                          "FOREIGN KEY (itemID) REFERENCES item(itemID));");
 
     if (isBuilt) {
@@ -104,7 +105,9 @@ void databaseManager::initializeDatabase()
     isBuilt = query.exec("CREATE TABLE IF NOT EXISTS income ("
                          "incomeID INTEGER PRIMARY KEY AUTOINCREMENT, "
                          "savingID INTEGER NOT NULL, "
-                         "FOREIGN KEY (savingID) REFERENCES saving(savingID));");  // Removed savingGoal
+                         "incomeAmount DOUBLE NOT NULL, "
+                         "date TEXT NOT NULL, "
+                         "FOREIGN KEY (savingID) REFERENCES saving(savingID));");
 
     if (isBuilt) {
         qDebug() << "Income table created or already exists";
@@ -310,6 +313,74 @@ QList<QString> databaseManager::getAllItemNames()
     }
     return itemNames;
 }
+
+QList<QString> databaseManager::getAllBudgetNames()
+{
+    QList<QString> budgetNames;
+    if(!db.isOpen())
+    {
+        qDebug() << "Database not open";
+        throw std::runtime_error("Database is not open.");
+    }
+    QSqlQuery query(db);
+    query.prepare("SELECT budgetName FROM budget");
+    if (!query.exec()) {
+        qDebug() << "Failed to retrieve item names:" << query.lastError();
+        throw std::runtime_error("Query failed.");
+    }
+    while (query.next()) {
+        QString name = query.value(0).toString();
+        budgetNames.append(name);
+    }
+    return budgetNames;
+}
+
+QList<Saving> databaseManager::getAllSavingPlans()
+{
+    QList<Saving> savings;
+    if (!db.isOpen()) {
+        qDebug() << "Database not open";
+        throw std::runtime_error("Database is not open.");
+    }
+
+    QSqlQuery query(db);
+    query.prepare("SELECT savingID, savingGoal, goalRemaining, description FROM saving ");
+    if (!query.exec()) {
+        qDebug() << "Failed to retrieve savings:" << query.lastError();
+        throw std::runtime_error("Query failed.");
+    }
+    while (query.next()) {
+        int savingID = query.value(0).toInt();
+        double savingGoal = query.value(1).toDouble();
+        QString description = query.value(2).toString();
+        savings.append(Saving(savingID,savingGoal,description));
+    }
+    return savings;
+}
+
+QList<Expense> databaseManager::getAllExpenses()
+{
+    QList<Expense> expenses;
+    if (!db.isOpen()) {
+        qDebug() << "Database not open";
+        throw std::runtime_error("Database is not open.");
+    }
+
+    QSqlQuery query(db);
+    query.prepare("SELECT total, description, date FROM expense ");
+    if (!query.exec()) {
+        qDebug() << "Failed to retrieve savings:" << query.lastError();
+        throw std::runtime_error("Query failed.");
+    }
+    while (query.next()) {
+        double total = query.value(0).toDouble();
+        QString description = query.value(1).toString();
+        QString date = query.value(2).toString();
+        expenses.append(Expense(total, description, date));
+    }
+    return expenses;
+}
+
 
 
 QList<Item> databaseManager::getItemsByBudget(int budgetID)

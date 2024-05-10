@@ -18,7 +18,6 @@ public:
     int getSavingID() const;
     double getSavingGoal() const;
     QString getComment() const;
-    void updateGoalRemaining(double income);
     void setSavingGoal(double newGoal);
     void setSavingComment(const QString& newComment);
 };

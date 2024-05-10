@@ -116,9 +116,18 @@ private slots:
 
     void on_returnFromTransPage_clicked();
 
+    // void on_expenseDateEdit_userDateChanged(const QDate &date);
 
 private:
     Ui::MainWindow *ui;
+    QListWidget* savingListWidget;
+    QListWidget* budgetListWidget;
+    QListWidget* transactionListWidget;
+    QListWidget* itemListWidget;
+    QListWidgetItem* budgetListWidgetItem;
+    QListWidgetItem* itemListWidgetItem;
+    QListWidgetItem* savingListWidgetItem;
+    QListWidgetItem* transactionListWidgetItem;
     databaseManager db;
     Budget currentBudget;
     Item currentItem;

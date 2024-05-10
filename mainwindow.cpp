@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     updateBudgetBox();
     updateItemBox();
+    updateBudgetList();
     ui->newItemTotalInput->setText("0");
     // connect(ui->saveBudgetButton, &QPushButton::clicked, this, &MainWindow::on_saveBudgetButton_clicked);
 }
@@ -63,6 +64,44 @@ void MainWindow::updateCurrentBudget(const QString& name)
     }catch(const std::runtime_error&e)
     {
         qDebug() << "Error updating budget: " << e.what();
+    }
+}
+
+void MainWindow::updateBudgetList()
+{
+    QList<Budget> budgets = db.getAllBudgets();
+    QListWidget* budgetList = ui->budgetListWidget;
+    budgetList->clear();
+
+    QListWidgetItem* titleItem = new QListWidgetItem;
+    titleItem->setText("Budget List");
+    QIcon titleIcon("bitcoin.png");
+    titleItem->setIcon(titleIcon);
+    budgetList->addItem(titleItem);
+
+    if(budgets.isEmpty())
+    {
+        qDebug() << "No budgets found or database error.";
+        return;
+    }
+    for(const Budget& budget: budgets)
+    {
+        // create new QlistwidgetItem
+        QListWidgetItem* newItem = new QListWidgetItem;
+
+        // format the string that needs to display
+        QString displayText = QString("%1 - Total: %2, Remaining: %3")
+                                  .arg(budget.getName())
+                                  .arg(budget.getTotal())
+                                  .arg(budget.getRemaining());
+        // set up the content display
+        newItem->setText(displayText);
+
+        //set budgetID as data that saved in the options, using Qt::userrole to avoid conflict.
+        newItem->setData(Qt::UserRole, QVariant(budget.getBudgetID()));
+
+        // add new item in to list
+        budgetList->addItem(newItem);
     }
 }
 
@@ -171,6 +210,9 @@ void MainWindow::on_saveBudgetButton_clicked()
 
     }
     updateBudgetBox();
+    updateBudgetList();
+    ui->newBudgetNameInput->clear();
+    ui->newBudgetTotalInput->clear();
     navigateToPage(1);
     previousPageIndex = 2;
 }
@@ -223,7 +265,8 @@ void MainWindow::on_addItemButton_clicked()
     qDebug() << "You have successfully add a new Item to " << budgetName;
 
     updateItemBox();
-    ui->newBudgetNameInput->clear();
+    updateBudgetList();
+    ui->newItemNameInput->clear();
     ui->newItemLimitInput->clear();
     ui->newItemTotalInput->clear();
     navigateToPage(1);
@@ -242,8 +285,10 @@ void MainWindow::on_confirmExpenseButton_clicked()
     double amount = ui->expenseAmountInput->text().toDouble();
     QString description = ui->expenseDescriptionInput->text();
     QString itemName = ui->ItemCombobox->currentText();
+    QDate date = ui->expenseDateEdit->date();
+    QString dateStr = date.toString("yyyy-MM-dd");
     int itemID = db.getItemID(itemName);
-    Expense expense(itemID,amount,description);
+    Expense expense(itemID,amount,description,dateStr);
     if(db.addExpense(expense))
     {
         qDebug() << "Add new expense to " << itemName << " successfull!" ;
@@ -369,5 +414,6 @@ void MainWindow::on_returnFromTransPage_clicked()
 {
     navigateToPage(0);
 }
+
 
 

@@ -29,7 +29,3 @@ void Saving::setSavingGoal(double goal)
     savingGoal = goal;
 }
 
-void Saving::updateGoalRemaining(double income)
-{
-    goalRemaining = savingGoal - income;
-}

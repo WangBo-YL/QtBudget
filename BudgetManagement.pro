@@ -13,6 +13,7 @@ SOURCES += \
     category.cpp \
     databaseManager.cpp \
     expense.cpp \
+    income.cpp \
     item.cpp \
     main.cpp \
     mainwindow.cpp \

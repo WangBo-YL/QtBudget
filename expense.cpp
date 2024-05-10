@@ -1,7 +1,8 @@
 #include "expense.h"
 
-Expense::Expense(int itemID, double total, const QString& description):total(total),description(description),itemID(itemID){}
+Expense::Expense(int itemID, double total, const QString& description, const QString& date):total(total),description(description),date(date), itemID(itemID){}
 
+Expense::Expense(double total, const QString& description, const QString& date):total(total),description(description),date(date){}
 
 QString Expense::getDescription() const
 {
@@ -28,6 +29,9 @@ void Expense::setTotal(double total)
     this->total = total;
 }
 
+void Expense::setDate(const QString& date) {this->date = date;}
+
+QString Expense::getDate() const {return date;}
 
 int Expense::getExpID() const
 {

@@ -9,6 +9,9 @@
 #include "budget.h"
 #include "item.h"
 #include "expense.h"
+#include "saving.h"
+#include "expense.h"
+#include "income.h"
 class databaseManager
 {
 private:
@@ -24,6 +27,9 @@ public:
     QList<Item> getItemsByBudget(int budgetID);
     QList<Item> getAllItems();
     QList<QString> getAllItemNames();
+    QList<QString> getAllBudgetNames();
+    QList<Saving> getAllSavingPlans();
+    QList<Expense> getAllExpenses();
     Item getItem(const QString& name);
     bool updateBudget(const Budget& budget);
     bool updateItem(const Item& item);
