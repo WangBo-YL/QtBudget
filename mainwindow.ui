@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="mainMenuPage">
      <widget class="QPushButton" name="budgetMenuButton">
@@ -707,10 +707,17 @@
       <property name="geometry">
        <rect>
         <x>320</x>
-        <y>310</y>
+        <y>320</y>
         <width>131</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="date">
+       <date>
+        <year>2024</year>
+        <month>5</month>
+        <day>10</day>
+       </date>
       </property>
      </widget>
      <widget class="QPushButton" name="confirmExpenseButton">
@@ -829,8 +836,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>100</width>
-         <height>30</height>
+         <width>701</width>
+         <height>371</height>
         </rect>
        </property>
        <attribute name="label">
@@ -852,8 +859,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>100</width>
-         <height>30</height>
+         <width>701</width>
+         <height>371</height>
         </rect>
        </property>
        <attribute name="label">
@@ -1010,7 +1017,7 @@
       <property name="geometry">
        <rect>
         <x>440</x>
-        <y>360</y>
+        <y>390</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -1022,8 +1029,8 @@
      <widget class="QLabel" name="savingGoalLabel">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>110</y>
+        <x>170</x>
+        <y>210</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -1045,7 +1052,7 @@
       <property name="geometry">
        <rect>
         <x>310</x>
-        <y>360</y>
+        <y>390</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -1057,8 +1064,8 @@
      <widget class="QLabel" name="savingDescriptionLabel">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>180</y>
+        <x>170</x>
+        <y>270</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -1079,8 +1086,8 @@
      <widget class="QLineEdit" name="savingDescriptionInput">
       <property name="geometry">
        <rect>
-        <x>290</x>
-        <y>180</y>
+        <x>280</x>
+        <y>270</y>
         <width>291</width>
         <height>31</height>
        </rect>
@@ -1089,31 +1096,21 @@
        <string/>
       </property>
      </widget>
-     <widget class="QDateEdit" name="savingStartDateEdit">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>260</y>
-        <width>81</width>
-        <height>31</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QLineEdit" name="savingGoalInput">
       <property name="geometry">
        <rect>
-        <x>290</x>
-        <y>110</y>
+        <x>280</x>
+        <y>210</y>
         <width>291</width>
         <height>31</height>
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="savingStartDateLabel">
+     <widget class="QLabel" name="savingPlanNameLabel">
       <property name="geometry">
        <rect>
-        <x>190</x>
-        <y>260</y>
+        <x>170</x>
+        <y>150</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -1125,42 +1122,20 @@
        </font>
       </property>
       <property name="text">
-       <string>Start Date:</string>
+       <string>Name:</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QDateEdit" name="savingEndDateEdit">
+     <widget class="QLineEdit" name="savingNameInput">
       <property name="geometry">
        <rect>
-        <x>490</x>
-        <y>260</y>
-        <width>81</width>
+        <x>280</x>
+        <y>150</y>
+        <width>291</width>
         <height>31</height>
        </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="savingEndDateLabel">
-      <property name="geometry">
-       <rect>
-        <x>380</x>
-        <y>260</y>
-        <width>101</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>End Date:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </widget>
@@ -1327,7 +1302,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QDateEdit" name="intcomeDateEdit">
+     <widget class="QDateEdit" name="incomeDateEdit">
       <property name="geometry">
        <rect>
         <x>370</x>
@@ -1335,6 +1310,13 @@
         <width>91</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="date">
+       <date>
+        <year>2024</year>
+        <month>5</month>
+        <day>10</day>
+       </date>
       </property>
      </widget>
      <widget class="QComboBox" name="savingCombobox">

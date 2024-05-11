@@ -14,11 +14,11 @@
 #include <QSqlTableModel>
 #include <QStandardItemModel>
 #include <QInputDialog>
+#include <QDateEdit>
 #include "databaseManager.h"
 
 enum mode{NEW, EDIT};
-//一些关于new item的思考， 设计思路， 如果Dropbox有内容，则可以新建item，并选择新建到哪个budget，
-//如果没有budget， 在尝试保存的时候弹出提示框，并且失败。
+
 QT_BEGIN_NAMESPACE
 namespace Ui
 {
@@ -40,6 +40,13 @@ private:
     void updateBudgetBox();
     void updateCurrentBudget(const QString& budgetName);
     void updateItemBox();
+    void updateItemListWidget();
+    void updateTransactionTableWidget();
+    void updateSavingBox();
+    void updateSavingListWidget();
+    void addIncomeToTable(const income& income);
+    void addExpenseToTable(const Expense& expense);
+
 private slots:
 
     void on_budgetMenuButton_clicked();
@@ -117,6 +124,14 @@ private slots:
     void on_returnFromTransPage_clicked();
 
     // void on_expenseDateEdit_userDateChanged(const QDate &date);
+
+    void on_budgetListWidget_itemClicked(QListWidgetItem *item);
+
+    // void on_budgetListWidget_itemSelectionChanged();
+
+    void on_itemListWidget_itemClicked(QListWidgetItem *item);
+
+    void on_savingsListWidget_itemClicked(QListWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;

@@ -23,24 +23,31 @@ public:
     bool addItem(const Item& item);
     bool addBudget(const Budget& budget);
     Budget getBudget(const QString& name);
+    Saving getSaving(int savingID);
     QList<Budget> getAllBudgets();
     QList<Item> getItemsByBudget(int budgetID);
     QList<Item> getAllItems();
+    QList<QString> getItemNamesByBudget(int budgetID);
     QList<QString> getAllItemNames();
     QList<QString> getAllBudgetNames();
     QList<Saving> getAllSavingPlans();
     QList<Expense> getAllExpenses();
+    QList<income> getAllIncomes();
     Item getItem(const QString& name);
-    bool updateBudget(const Budget& budget);
+    bool updateBudget(const Budget& budget, int budgetID);
     bool updateItem(const Item& item);
     bool deleteBudget(const QString& budgetName);
     bool deleteItem(int itemID);
+    bool updateSaving(const Saving& saving, int savingID);
     QSqlDatabase& getDatabase(){ return db;}
     int getBudgetIdByItem(const Item& item);
     int getItemID(const QString& name);
+    int getSavingID(const QString& savingName);
     bool updateItemTotal(double Transaction, const Item& item);
     bool updateBudgetTotal(double spend, const Budget& budget);
     bool addExpense(const Expense& expense);
+    bool addSavingPlan(const Saving& saving);
+    bool addIncome(const income& income);
 };
 
 #endif // DATABASEMANAGEMENT_H

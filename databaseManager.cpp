@@ -91,6 +91,7 @@ void databaseManager::initializeDatabase()
     // Create saving table
     isBuilt = query.exec("CREATE TABLE IF NOT EXISTS saving ("
                          "savingID INTEGER PRIMARY KEY AUTOINCREMENT, "
+                         "planName VARCHAR(100) NOT NULL,"
                          "savingGoal DOUBLE NOT NULL, "
                          "goalRemaining DOUBLE NOT NULL, "
                          "description TEXT);");
@@ -162,7 +163,7 @@ bool databaseManager::addItem(const Item& item)
     }
 
     // Update the total amount of the budget
-    query.prepare("UPDATE budget SET remainingAmount = total - ? WHERE budgetID = ?");
+    query.prepare("UPDATE budget SET remainingAmount = remainingAmount - ? WHERE budgetID = ?");
     query.addBindValue(item.getTotal());
     query.addBindValue(item.getBudgetID());
 
@@ -213,6 +214,33 @@ bool databaseManager::addBudget(const Budget& budget)
         return true;
     }
 }
+
+bool databaseManager::addSavingPlan(const Saving& saving)
+{
+    if (!db.isOpen()) {
+        qDebug() << "Database not open";
+        return false;
+    }
+
+    QSqlQuery query(db);
+    db.transaction();
+
+    query.prepare("INSERT INTO saving (planName, savingGoal, goalRemaining, description) VALUES (?, ?, ?, ?)");
+    query.addBindValue(saving.getName());
+    query.addBindValue(saving.getSavingGoal());
+    query.addBindValue(saving.getSavingGoal());
+    query.addBindValue(saving.getComment());
+
+    if (!query.exec()) {
+        db.rollback();
+        qDebug() << "Failed to add saving plan." << query.lastError();
+        return false;
+    } else {
+        db.commit();
+        return true;
+    }
+}
+
 
 Budget databaseManager::getBudget (const QString& name)
 {
@@ -293,6 +321,29 @@ QList<Item> databaseManager::getAllItems()
     return items;
 }
 
+QList<QString> databaseManager::getItemNamesByBudget(int budgetID)
+{
+    QList<QString> itemNames;
+    if(!db.isOpen())
+    {
+        qDebug() << "Database not open";
+        throw std::runtime_error("Database is not open.");
+    }
+    QSqlQuery query(db);
+    query.prepare("SELECT itemName FROM item WHERE budgetID = ?");
+    query.addBindValue(budgetID);
+
+    if (!query.exec()) {
+        qDebug() << "Failed to retrieve item names:" << query.lastError();
+        throw std::runtime_error("Query failed.");
+    }
+    while (query.next()) {
+        QString name = query.value(0).toString();
+        itemNames.append(name);
+    }
+    return itemNames;
+}
+
 QList<QString> databaseManager::getAllItemNames()
 {
     QList<QString> itemNames;
@@ -303,6 +354,7 @@ QList<QString> databaseManager::getAllItemNames()
     }
     QSqlQuery query(db);
     query.prepare("SELECT itemName FROM item");
+
     if (!query.exec()) {
         qDebug() << "Failed to retrieve item names:" << query.lastError();
         throw std::runtime_error("Query failed.");
@@ -344,16 +396,18 @@ QList<Saving> databaseManager::getAllSavingPlans()
     }
 
     QSqlQuery query(db);
-    query.prepare("SELECT savingID, savingGoal, goalRemaining, description FROM saving ");
+    query.prepare("SELECT savingID, planName, savingGoal, goalRemaining, description FROM saving ");
     if (!query.exec()) {
         qDebug() << "Failed to retrieve savings:" << query.lastError();
         throw std::runtime_error("Query failed.");
     }
     while (query.next()) {
         int savingID = query.value(0).toInt();
-        double savingGoal = query.value(1).toDouble();
-        QString description = query.value(2).toString();
-        savings.append(Saving(savingID,savingGoal,description));
+        QString name = query.value(1).toString();
+        double savingGoal = query.value(2).toDouble();
+        double remaining = query.value(3).toDouble();
+        QString description = query.value(4).toString();
+        savings.append(Saving(savingID,name,savingGoal,remaining,description));
     }
     return savings;
 }
@@ -410,7 +464,30 @@ QList<Item> databaseManager::getItemsByBudget(int budgetID)
     return items;
 }
 
+QList<income> databaseManager::getAllIncomes()
+{
+    QList<income> incomes;
+    if (!db.isOpen()) {
+        qDebug() << "Database not open";
+        throw std::runtime_error("Database is not open.");
+    }
 
+    QSqlQuery query(db);
+    query.prepare("SELECT incomeID, incomeAmount, date FROM income");
+
+    if (!query.exec()) {
+        qDebug() << "Failed to retrieve incomes:" << query.lastError();
+        throw std::runtime_error("Query failed.");
+    }
+
+    while (query.next()) {
+        int incomeID = query.value(0).toInt();
+        double amount = query.value(1).toDouble();
+        QString date = query.value(2).toString();
+        incomes.append(income(incomeID, amount, date));
+    }
+    return incomes;
+}
 
 bool databaseManager::updateItem(const Item& item)
 {
@@ -434,13 +511,13 @@ bool databaseManager::updateItem(const Item& item)
         qDebug() << "Failed to update item:" << query.lastError();
         return false;
     }
-
+    qDebug() << "Update item successful.";
     db.commit();
     return true;
 }
 
 
-bool databaseManager::updateBudget(const Budget& budget) {
+bool databaseManager::updateBudget(const Budget& budget,int budgetID) {
     if (!db.isOpen()) {
         qDebug() << "Database not open";
         return false;
@@ -449,10 +526,10 @@ bool databaseManager::updateBudget(const Budget& budget) {
     QSqlQuery query(db);
     db.transaction();  // Start transaction
 
-    query.prepare("UPDATE budget SET name = ?, total = ? WHERE budgetID = ?");
+    query.prepare("UPDATE budget SET budgetName = ?, total = ? WHERE budgetID = ?");
     query.addBindValue(budget.getName());
     query.addBindValue(budget.getTotal());
-    query.addBindValue(budget.getBudgetID());
+    query.addBindValue(budgetID);
 
     if (!query.exec()) {
         qDebug() << "Failed to update budget:" << query.lastError();
@@ -465,6 +542,47 @@ bool databaseManager::updateBudget(const Budget& budget) {
 }
 
 
+
+bool databaseManager::updateSaving(const Saving& saving, int savingID)
+{
+    if (!db.isOpen()) {
+        qDebug() << "Database not open";
+        return false;
+    }
+    double oldGoal,oldremaining;
+    QSqlQuery query(db);
+    query.prepare("SELECT savingGoal, goalRemaining FROM saving WHERE savingID = ?");
+    query.addBindValue(savingID);
+    if (!query.exec()) {
+        qDebug() << "Failed to retrieve items:" << query.lastError();
+        throw std::runtime_error("Query failed.");
+    }
+    if(query.next())
+    {
+        oldGoal = query.value(0).toDouble();
+        oldremaining = query.value(1).toDouble();
+    }else{
+        qDebug() << "No saving found with ID: " <<savingID;
+        return false;
+    }
+
+    db.transaction();  // Start transaction
+
+    query.prepare("UPDATE saving SET planName = ?, savingGoal = ?, goalRemaining = ? WHERE savingID = ?");
+    query.addBindValue(saving.getName());
+    query.addBindValue(saving.getSavingGoal());
+    query.addBindValue(oldremaining + saving.getSavingGoal()-oldGoal); //calculate the new goal remaining
+    query.addBindValue(savingID);
+
+    if (!query.exec()) {
+        qDebug() << "Failed to update saving plan:" << query.lastError();
+        db.rollback();  // Rollback transaction if update failed
+        return false;
+    }
+
+    db.commit();  // Commit the transaction
+    return true;
+}
 
 bool databaseManager::deleteItem(int itemID) {
     if (!db.isOpen()) {
@@ -573,6 +691,34 @@ Item databaseManager::getItem(const QString& name)
     } else {
         qDebug() << "Item not found with ID:" << name;
         throw std::runtime_error("Item not found.");
+    }
+}
+
+Saving databaseManager::getSaving(int savingID)
+{
+    if (!db.isOpen()) {
+        qDebug() << "Database not open";
+        throw std::runtime_error("Database is not open.");
+    }
+
+    QSqlQuery query(db);
+    query.prepare("SELECT planName, savingGoal, goalRemaining, description FROM saving WHERE savingID = ?");
+    query.addBindValue(savingID);
+
+    if (!query.exec()) {
+        qDebug() << "Failed to retrieve saving plan:" << query.lastError().text();
+        throw std::runtime_error("Query failed to execute.");
+    }
+
+    if (query.next()) {
+        QString planName = query.value(0).toString();
+        double goal = query.value(1).toDouble();
+        double remain = query.value(2).toDouble();
+        QString description = query.value(3).toString();
+        return Saving(planName, goal, remain, description);
+    } else {
+        qDebug() << "Saving plan not found with ID:" << savingID;
+        throw std::runtime_error("Saving plan not found.");
     }
 }
 
@@ -692,8 +838,7 @@ bool databaseManager::updateBudgetTotal(double spend, const Budget& budget)
 
 bool databaseManager::addExpense(const Expense& expense)
 {
-    if(!db.isOpen())
-    {
+    if (!db.isOpen()) {
         qDebug() << "Database not open";
         throw std::runtime_error("Database is not open.");
     }
@@ -703,10 +848,11 @@ bool databaseManager::addExpense(const Expense& expense)
 
     try {
         // Insert the new expense
-        query.prepare("INSERT INTO expense (itemID, total, description) VALUES (?, ?, ?)");
+        query.prepare("INSERT INTO expense (itemID, total, description, date) VALUES (?, ?, ?, ?)"); // Add date field here
         query.addBindValue(expense.getItemID());
         query.addBindValue(expense.getTotal());
         query.addBindValue(expense.getDescription());
+        query.addBindValue(expense.getDate()); // Assume getDate returns the date in the correct format
         if (!query.exec()) {
             throw std::runtime_error("Failed to insert expense: " + query.lastError().text().toStdString());
         }
@@ -734,6 +880,69 @@ bool databaseManager::addExpense(const Expense& expense)
         query.addBindValue(budgetID);
         if (!query.exec()) {
             throw std::runtime_error("Failed to update budget remaining amount: " + query.lastError().text().toStdString());
+        }
+
+        // Commit transaction
+        db.commit();
+        qDebug() << "Expense added successfully and related totals updated.";
+        return true;
+    } catch (const std::runtime_error& e) {
+        db.rollback();
+        qDebug() << "Transaction failed: " << e.what();
+        return false;
+    }
+}
+
+int databaseManager::getSavingID(const QString& savingName)
+{
+    if(!db.isOpen())
+    {
+        qDebug() << "Database not open";
+        throw std::runtime_error("Database is not open.");
+        return -1;
+    }
+
+    QSqlQuery query(db);
+    query.prepare("SELECT savingID FROM saving WHERE planName = ?");
+    query.addBindValue(savingName);
+
+    if (query.exec() && query.next()) {
+        return query.value(0).toInt();
+    } else {
+        qDebug() << "Failed to retrieve item ID for " << savingName << ": " << query.lastError();
+        return -1;
+    }
+}
+
+
+bool databaseManager::addIncome(const income& income)
+{
+    if(!db.isOpen())
+    {
+        qDebug() << "Database not open";
+        throw std::runtime_error("Database is not open.");
+        return false;
+    }
+
+    QSqlQuery query(db);
+    db.transaction();
+
+    try {
+        // Insert the new income
+        query.prepare("INSERT INTO income (savingID, incomeAmount, Date) VALUES (?, ?, ?)");
+        query.addBindValue(income.getSavingID());
+        query.addBindValue(income.getAmount());
+        query.addBindValue(income.getDate());
+        if (!query.exec()) {
+            throw std::runtime_error("Failed to insert income: " + query.lastError().text().toStdString());
+        }
+
+        // Update the savings total
+        query.prepare("UPDATE saving SET goalRemaining = goalRemaining - ? WHERE savingID = ?");
+        query.addBindValue(income.getAmount());
+        query.addBindValue(income.getSavingID());
+        if (!query.exec()) {
+            throw std::runtime_error("Failed to update item total: " + query.lastError().text().toStdString());
         }
 
         // Commit transaction
