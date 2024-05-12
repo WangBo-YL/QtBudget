@@ -34,13 +34,17 @@ public:
     QList<Expense> getAllExpenses();
     QList<income> getAllIncomes();
     Item getItem(const QString& name);
+    bool updateBudgetRemaining(const Item& item);
+    bool updateItemTotal(const Expense& expense);
     bool updateBudget(const Budget& budget, int budgetID);
-    bool updateItem(const Item& item);
-    bool deleteBudget(const QString& budgetName);
+    bool updateItem(int id,const QString& name, double cap, double total);
+    bool deleteBudget(int budgetID);
     bool deleteItem(int itemID);
+    bool deleteSaving(int savingID);
     bool updateSaving(const Saving& saving, int savingID);
     QSqlDatabase& getDatabase(){ return db;}
     int getBudgetIdByItem(const Item& item);
+    int getBudgetIDByName(const QString& name);
     int getItemID(const QString& name);
     int getSavingID(const QString& savingName);
     bool updateItemTotal(double Transaction, const Item& item);

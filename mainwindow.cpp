@@ -141,9 +141,11 @@ void MainWindow::updateItemListWidget()
 
         //set itemID as data that saved in the options, using Qt::userrole to avoid conflict.
         newItem->setData(Qt::UserRole, QVariant(item.getBudgetID()));
-
+        int retrievedID = newItem->data(Qt::UserRole).toInt();  // Retrieve with toInt
+        qDebug() << "Added item to list with ID: " << retrievedID;
         // add new item in to list
         itemList->addItem(newItem);
+        qDebug() << "Adding item to list with ID = " << newItem->data(Qt::UserRole).toInt();
     }
 }
 
@@ -183,11 +185,12 @@ void MainWindow::updateBudgetList()
 
         //set budgetID as data that saved in the options, using Qt::userrole to avoid conflict.
         newItem->setData(Qt::UserRole, QVariant(budget.getBudgetID()));
-
+        qDebug() << "budgetID : " << budget.getBudgetID();
         // add new item in to list
         budgetList->addItem(newItem);
     }
 }
+
 
 
 
@@ -283,8 +286,6 @@ void MainWindow::on_budgetListButton_clicked()
     ui->budgetDetaiButton->hide();
     ui->deleteBudgetButton->hide();
     navigateToPage(4);
-
-
 }
 
 
@@ -355,6 +356,8 @@ void MainWindow::on_saveBudgetButton_clicked()
 }
 
 
+
+
 void MainWindow::on_returnFromBudgetListButton_clicked()
 {
     navigateToPage(1);
@@ -365,6 +368,7 @@ void MainWindow::on_returnFromBudgetListButton_clicked()
 void MainWindow::on_budgetDetaiButton_clicked()
 {
     updateItemListWidget();
+    updateBudgetBox();
     navigateToPage(5);
     previousPageIndex = 4;
 }
@@ -379,7 +383,23 @@ void MainWindow::on_editBudgetButton_clicked()
 
 void MainWindow::on_deleteBudgetButton_clicked()
 {
+    QListWidgetItem* selectedItem = ui->budgetListWidget->currentItem();
+    if (selectedItem == nullptr) {
+        QMessageBox::warning(this, "Selection Error", "Please select a saving to delete.");
+        return;
+    }
 
+    int budgetID = selectedItem->data(Qt::UserRole).toInt();
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Delete budget", "Are you sure you want to delete this budget?", QMessageBox::Yes|QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
+        if (db.deleteBudget(budgetID)) {
+            delete selectedItem;
+            QMessageBox::information(this, "Success", "Budget deleted successfully.");
+        } else {
+            QMessageBox::warning(this, "Error", "Failed to delete the budget from the database.");
+        }
+    }
 }
 
 
@@ -395,37 +415,52 @@ void MainWindow::on_cancelAddItemButton_clicked()
 void MainWindow::on_addItemButton_clicked()
 {
     QString budgetName = ui->budgetComboBox->currentText();
-    updateCurrentBudget(budgetName);
-    QString name = ui->newItemNameInput->text();
+    QString name = ui->newItemNameInput->text().trimmed();
     double cap = ui->newItemLimitInput->text().toDouble();
     double total = ui->newItemTotalInput->text().toDouble();
-    Item item(currentBudget.getBudgetID(),name,cap,total);
 
-    if(previousPageIndex !=5)
-    {
-        if(db.addItem(item))
-        {
-            qDebug() << "You have successfully add a new Item to " << budgetName;
-            QMessageBox::information(this,"Success","Add item to budget successful!");
-        }else{
-            QMessageBox::warning(this,"Failed","Failed adding new items to budget.");
-        }
-    }else{
-        int itemID = itemListWidgetItem->data(Qt::UserRole).toInt();
-        qDebug() << "current item ID is : " << itemID;
-        Item updatedItem(itemID,name,cap,total);
-        if(db.updateItem(updatedItem))
-        {
-            qDebug() << "You have successfully update Item to " << budgetName;
-            QMessageBox::information(this,"Success","Update item to budget successful!");
-        }else{
-             QMessageBox::warning(this,"Failed","Failed updating  item to budget.");
-        }
+    if (budgetName.isEmpty()) {
+        QMessageBox::warning(this, "Input Error", "Please select a budget.");
+        return;
     }
 
-    updateItemBox();
-    updateBudgetList();
-    updateItemListWidget();
+    if (name.isEmpty()) {
+        QMessageBox::warning(this, "Input Error", "Please enter a valid item name.");
+        return;
+    }
+
+    if (cap <= 0 || total < 0) {
+        QMessageBox::warning(this, "Input Error", "Cap and Total must be greater than zero.");
+        return;
+    }
+
+    int budgetID = db.getBudgetIDByName(budgetName);
+    qDebug() << "Budget ID is " << budgetID;
+    if (budgetID == -1) {
+        QMessageBox::warning(this, "Error", "Invalid budget selected.");
+        return;
+    }
+
+    Item item(budgetID, name, cap, total);
+    if (db.addItem(item)) {
+        qDebug() << "You have successfully added a new Item to " << budgetName;
+
+        QMessageBox::information(this, "Success", "Add item to budget successful!");
+
+
+        int itemID = db.getItemID(name);
+        qDebug() << "New added item ID is " << itemID;
+    } else {
+        QMessageBox::warning(this, "Failed", "Failed adding new items to budget.");
+    }
+
+    if(db.updateBudgetRemaining(item))
+    {
+        qDebug() << "Update budget remaining successfully.";
+    }else{
+        qDebug() << "Failed update budget remaining.";
+    }
+
     ui->newItemNameInput->clear();
     ui->newItemLimitInput->clear();
     ui->newItemTotalInput->clear();
@@ -447,14 +482,29 @@ void MainWindow::on_confirmExpenseButton_clicked()
     QString itemName = ui->ItemCombobox->currentText();
     QDate date = ui->expenseDateEdit->date();
     QString dateStr = date.toString("yyyy-MM-dd");
-    qDebug() << "Date is " << dateStr;
+
+    if (itemName.isEmpty()) {
+        QMessageBox::warning(this, "Input Error", "Please select an item.");
+        return;
+    }
+
+    if (amount <= 0) {
+        QMessageBox::warning(this, "Input Error", "Expense amount must be greater than zero.");
+        return;
+    }
 
     int itemID = db.getItemID(itemName);
-    Expense expense(itemID,amount,description,dateStr);
-    if(db.addExpense(expense))
-    {
-        qDebug() << "Add new expense to " << itemName << " successfull!" ;
-        QMessageBox::information(this,"Success","Add expense record successfully.");
+    if (itemID == -1) {
+        QMessageBox::warning(this, "Error", "Invalid item selected.");
+        return;
+    }
+
+    Expense expense(itemID, amount, description, dateStr);
+    if (db.addExpense(expense)) {
+        qDebug() << "Add new expense to " << itemName << " successful!";
+        QMessageBox::information(this, "Success", "Add expense record successfully.");
+    } else {
+        QMessageBox::warning(this, "Failed", "Failed to add new expense.");
     }
 
     ui->expenseAmountInput->clear();
@@ -463,6 +513,7 @@ void MainWindow::on_confirmExpenseButton_clicked()
     navigateToPage(6);
     previousPageIndex = 7;
 }
+
 
 
 void MainWindow::on_returnFromExpenseMenuButton_clicked()
@@ -487,14 +538,30 @@ void MainWindow::on_returnFromItemListButton_clicked()
 
 void MainWindow::on_editItemButton_clicked()
 {
-    navigateToPage(3);
+    navigateToPage(14);
     previousPageIndex = 5;
 }
 
 
 void MainWindow::on_deleteItemButton_clicked()
 {
+    QListWidgetItem* selectedItem = ui->itemListWidget->currentItem();
+    if (selectedItem == nullptr) {
+        QMessageBox::warning(this, "Selection Error", "Please select an item to delete.");
+        return;
+    }
 
+    int itemID = selectedItem->data(Qt::UserRole).toInt();
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Delete Item", "Are you sure you want to delete this item?", QMessageBox::Yes|QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
+        if (db.deleteItem(itemID)) {
+            delete selectedItem;
+            QMessageBox::information(this, "Success", "Item deleted successfully.");
+        } else {
+            QMessageBox::warning(this, "Error", "Failed to delete the item from the database.");
+        }
+    }
 }
 
 
@@ -509,21 +576,35 @@ void MainWindow::on_finishAddIncomeButton_clicked()
     QString savingPlan = ui->savingCombobox->currentText();
     double incomeAmount = ui->newIncomeInput->text().toDouble();
     QString date = ui->incomeDateEdit->date().toString("yyyy-MM-dd");
-    qDebug() << "The selected date is: " << date;
+
+    if (savingPlan.isEmpty()) {
+        QMessageBox::warning(this, "Input Error", "Please select a saving plan.");
+        return;
+    }
+
+    if (incomeAmount <= 0) {
+        QMessageBox::warning(this, "Input Error", "Income amount must be greater than zero.");
+        return;
+    }
+
     int savingID = db.getSavingID(savingPlan);
-    income income(savingID,incomeAmount,date);
-    if(db.addIncome(income))
-    {
+    if (savingID == -1) {
+        QMessageBox::warning(this, "Error", "Invalid saving plan selected.");
+        return;
+    }
+
+    income newIncome(savingID, incomeAmount, date);
+    if (db.addIncome(newIncome)) {
         qDebug() << "Add income successfully!";
-        QMessageBox::information(this,"Success", "Add New Income Successfully!");
-    }else
-    {
-        QMessageBox::warning(this,"Failed", "Failed to add new income.");
+        QMessageBox::information(this, "Success", "Add New Income Successfully!");
+    } else {
+        QMessageBox::warning(this, "Failed", "Failed to add new income.");
     }
 
     navigateToPage(10);
     previousPageIndex = 13;
 }
+
 
 
 void MainWindow::on_cancelSavingPlanButton_clicked()
@@ -538,29 +619,46 @@ void MainWindow::on_cancelSavingPlanButton_clicked()
 
 void MainWindow::on_finishAddSavingPlanButton_clicked()
 {
-    QString savingName = ui->savingNameInput->text();
+    QString savingName = ui->savingNameInput->text().trimmed();
     double planAmount = ui->savingGoalInput->text().toDouble();
-    QString description = ui->savingDescriptionInput->text();
+    QString description = ui->savingDescriptionInput->text().trimmed();
 
-    Saving saving(savingName,planAmount,planAmount,description);
+
+    if (savingName.isEmpty()) {
+        QMessageBox::warning(this, "Input Error", "Please enter a valid saving plan name.");
+        return;
+    }
+
+    if (planAmount <= 0) {
+        QMessageBox::warning(this, "Input Error", "Please enter a valid amount for the saving plan. Amount must be greater than zero.");
+        return;
+    }
+
+    Saving saving(savingName, planAmount, planAmount, description);
+
     if(previousPageIndex != 12)
     {
         if(db.addSavingPlan(saving))
         {
-            qDebug() << "Add new saving plan successfull!";
-            QMessageBox::information(this,"Success!", "Add new Saving Plan Successful!");
-        }else{
-            QMessageBox::warning(this,"Failed!", "Add new Saving Plan Failed!");
+            qDebug() << "Add new saving plan successful!";
+            QMessageBox::information(this, "Success!", "Add new Saving Plan Successful!");
         }
-
-    }else{
-        int savingID = savingListWidgetItem->data(Qt::UserRole).toInt();
-        if(db.updateSaving(saving,savingID))
+        else
         {
-            qDebug() << "Updating saving plan successfull!";
-            QMessageBox::information(this,"Success!", "Updating Saving Plan Successful!");
-        }else{
-             QMessageBox::warning(this,"Failed!", "Updating Saving Plan Failed!");
+            QMessageBox::warning(this, "Failed!", "Add new Saving Plan Failed!");
+        }
+    }
+    else
+    {
+        int savingID = savingListWidgetItem->data(Qt::UserRole).toInt();
+        if(db.updateSaving(saving, savingID))
+        {
+            qDebug() << "Updating saving plan successful!";
+            QMessageBox::information(this, "Success!", "Updating Saving Plan Successful!");
+        }
+        else
+        {
+            QMessageBox::warning(this, "Failed!", "Updating Saving Plan Failed!");
         }
     }
 
@@ -569,6 +667,7 @@ void MainWindow::on_finishAddSavingPlanButton_clicked()
     navigateToPage(10);
     previousPageIndex = 11;
 }
+
 
 
 void MainWindow::on_returnFromReportPageButton_clicked()
@@ -592,7 +691,23 @@ void MainWindow::on_editSavingListButton_clicked()
 
 void MainWindow::on_deleteSavingsListButton_clicked()
 {
+    QListWidgetItem* selectedItem = ui->savingsListWidget->currentItem();
+    if (selectedItem == nullptr) {
+        QMessageBox::warning(this, "Selection Error", "Please select a saving to delete.");
+        return;
+    }
 
+    int savingID = selectedItem->data(Qt::UserRole).toInt();
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Delete saving", "Are you sure you want to delete this saving?", QMessageBox::Yes|QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
+        if (db.deleteSaving(savingID)) {
+            delete selectedItem;
+            QMessageBox::information(this, "Success", "Saving deleted successfully.");
+        } else {
+            QMessageBox::warning(this, "Error", "Failed to delete the saving from the database.");
+        }
+    }
 }
 
 
@@ -611,7 +726,9 @@ void MainWindow::on_newSavingPlanButton_clicked()
 
 void MainWindow::on_savingsListButton_clicked()
 {
-    updateSavingListWidget();
+    updateSavingListWidget(); 
+    ui->editSavingListButton->hide();
+    ui->deleteSavingsListButton->hide();
     navigateToPage(12);
 }
 
@@ -640,8 +757,8 @@ void MainWindow::on_budgetListWidget_itemClicked(QListWidgetItem *item)
         ui->budgetDetaiButton->show();
         ui->deleteBudgetButton->show();
         budgetListWidgetItem = item;
-    }else
-    {
+        qDebug() << "Budget selected, ID is: " << item->data(Qt::UserRole).toInt();
+    }else{
         ui->editBudgetButton->hide();
         ui->budgetDetaiButton->hide();
         ui->deleteBudgetButton->hide();
@@ -665,14 +782,15 @@ void MainWindow::on_budgetListWidget_itemClicked(QListWidgetItem *item)
 // }
 
 
-void MainWindow::on_itemListWidget_itemClicked(QListWidgetItem *item)
+void MainWindow::on_itemListWidget_itemClicked(QListWidgetItem *it)
 {
     bool hasSelection = ui->itemListWidget->selectedItems().isEmpty();
     if(!hasSelection)
     {
         ui->editItemButton->show();
         ui->deleteItemButton->show();
-        itemListWidgetItem = item;
+        itemListWidgetItem = it;
+        qDebug() << "Item selected, ID is: " << it->data(Qt::UserRole).toInt();
     }else
     {
         ui->editItemButton->hide();
@@ -689,10 +807,46 @@ void MainWindow::on_savingsListWidget_itemClicked(QListWidgetItem *item)
         ui->editSavingListButton->show();
         ui->deleteSavingsListButton->show();
         savingListWidgetItem = item;
+        qDebug() << "Saving selected, ID is: " << item->data(Qt::UserRole).toInt();
     }else
     {
         ui->editSavingListButton->hide();
         ui->deleteSavingsListButton->hide();
     }
+}
+
+
+void MainWindow::on_cancelEditItemButton_clicked()
+{
+    navigateToPage(5);
+    ui->editItemNameInput->clear();
+    ui->editItemLimitInput->clear();
+    ui->editItemTotalInput->clear();
+}
+
+
+void MainWindow::on_editItemFinishButton_clicked()
+{
+    QString name = ui->editItemNameInput->text();
+    double cap = ui->editItemLimitInput->text().toDouble();
+    double total = ui->editItemTotalInput->text().toDouble();
+
+    int itemID = itemListWidgetItem->data(Qt::UserRole).toInt();
+    qDebug() << "current item ID is : " << itemID;
+
+    if(db.updateItem(itemID,name,cap,total))
+    {
+        qDebug() << "You have successfully update Item to " ;
+        QMessageBox::information(this,"Success","Update item to budget successful!");
+    }else{
+        QMessageBox::warning(this,"Failed","Failed updating  item to budget.");
+    }
+
+    updateItemBox();
+    updateItemListWidget();
+    ui->editItemNameInput->clear();
+    ui->editItemLimitInput->clear();
+    ui->editItemTotalInput->clear();
+    navigateToPage(5);
 }
 

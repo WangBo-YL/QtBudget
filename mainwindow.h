@@ -133,6 +133,10 @@ private slots:
 
     void on_savingsListWidget_itemClicked(QListWidgetItem *item);
 
+    void on_cancelEditItemButton_clicked();
+
+    void on_editItemFinishButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QListWidget* savingListWidget;

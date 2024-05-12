@@ -1,0 +1,11 @@
+debug/budget.o
+debug/category.o
+debug/databaseManager.o
+debug/expense.o
+debug/income.o
+debug/item.o
+debug/main.o
+debug/mainwindow.o
+debug/saving.o
+debug/qrc_resource.o
+debug/moc_mainwindow.o

@@ -3,9 +3,11 @@
 Item::Item(int itemID, int budgetID,const QString& name, double cap, double total):itemID(itemID),budgetID(budgetID),name(name),cap(cap),itemTotal(total)
 {
 }
-Item::Item(int budgetId, const QString& name, double cap, double total):budgetID(budgetId),name(name),cap(cap),itemTotal(total)
+Item::Item(int budgetID, const QString& name, double cap, double total):budgetID(budgetID),name(name),cap(cap),itemTotal(total)
 {
 }
+
+
 
 
 QString Item::getName() const { return name; }
