@@ -253,9 +253,7 @@ void MainWindow::on_savingsMenuButton_clicked()
 
 void MainWindow::on_transactionHistoryButton_clicked()
 {
-    updateTransactionTableWidget();
     navigateToPage(9);
-
 }
 
 
@@ -510,6 +508,7 @@ void MainWindow::on_confirmExpenseButton_clicked()
     ui->expenseAmountInput->clear();
     ui->expenseDescriptionInput->clear();
     ui->ItemCombobox->setCurrentIndex(0);
+    addExpenseToTable(expense);
     navigateToPage(6);
     previousPageIndex = 7;
 }
@@ -601,6 +600,7 @@ void MainWindow::on_finishAddIncomeButton_clicked()
         QMessageBox::warning(this, "Failed", "Failed to add new income.");
     }
 
+    addIncomeToTable(newIncome);
     navigateToPage(10);
     previousPageIndex = 13;
 }
